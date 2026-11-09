@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>學生課後活動家長同意書產生器</title>
+<style>
+:root{--accent:#7b5ea7;--accent-d:#654a8e;--bg:#f2edf6;--line:#d9cfe4;--text:#1f2937;--muted:#6b7280;--warn:#b45309;--warn-bg:#fef3c7;--ok:#166534;--ok-bg:#dcfce7;--s:1}
+*{box-sizing:border-box}
+body{margin:0;font-family:"DFKai-SB","BiauKai","標楷體","Noto Serif TC","PMingLiU",serif;background:var(--bg);color:#000}
+.top{background:#7b5ea7;border-bottom:6px solid #b9a3d6;color:#fff;padding:14px 20px;font-family:system-ui,"Noto Sans TC",sans-serif}
+.top h1{margin:0;font-size:20px;letter-spacing:.5px}
+.top p{margin:2px 0 0;font-size:13px;opacity:.9}
+.top nav{margin-top:8px;font-size:14px}
+.top nav a{color:#fff;text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid #ffffff80;margin-right:6px}
+.top nav a.on{background:#fff;color:#654a8e;font-weight:700}
+.app{display:flex;gap:18px;padding:18px;align-items:flex-start;max-width:1400px;margin:0 auto}
+.panel{width:420px;flex:none;font-family:system-ui,"Noto Sans TC",sans-serif;font-size:15px;color:var(--text);position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding-right:2px}
+.card{background:#fff;border:1px solid #e4dbed;border-radius:12px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 1px 3px #5b46801a}
+.card>h2{font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;font-weight:700}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex:none}
+.panel label{display:block;margin:8px 0 0;font-size:13px;color:var(--muted)}
+.panel label.chip{margin:0}
+.panel input[type=text],.panel input[type=tel],.panel input[type=date],.panel input[type=time],.panel input[type=number],.panel textarea,.panel select{width:100%;min-height:40px;padding:8px 10px;margin-top:3px;font:inherit;font-size:15px;color:var(--text);background:#fff;border:1px solid var(--line);border-radius:8px}
+.panel input:focus,.panel textarea:focus,.panel select:focus,button:focus-visible{outline:2px solid #cbbbe3;outline-offset:1px;border-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{position:relative;display:inline-block}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14px;color:var(--text)}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip input:focus-visible+span{outline:2px solid #cbbbe3;outline-offset:1px}
+button{font:inherit;cursor:pointer}
+.btn{padding:9px 14px;min-height:40px;border:1px solid #b9a9d0;border-radius:8px;background:#faf8fc;color:var(--text);font-size:15px}
+.btn:hover{background:#f1eaf7}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.btn.primary:hover{background:var(--accent-d)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.block{width:100%}
+.hint{color:var(--muted);font-size:12.5px;line-height:1.5;margin:6px 0 0}
+.wkgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px}
+.wkgrid div{text-align:center;font-size:12px;color:var(--muted)}
+.wkgrid input{min-height:36px!important;padding:4px 2px!important;font-size:12px!important;text-align:center;margin:0!important}
+.warn{list-style:none;margin:0;padding:0;font-size:13.5px}
+.warn li{margin:0 0 6px;padding:7px 10px;border-radius:8px;background:var(--warn-bg);color:var(--warn)}
+.warn li.ok{background:var(--ok-bg);color:var(--ok)}
+.actions{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 0 4px;background:linear-gradient(to top,var(--bg) 70%,#f2edf600)}
+.actions .primary{flex:2}.actions .btn:not(.primary){flex:1}
+.pvhead{font-family:system-ui,"Noto Sans TC",sans-serif;font-size:13px;color:var(--muted);margin:0 0 8px;text-align:center}
+.preview{flex:1;min-width:0}
+.sheet-wrap{width:calc(210mm*var(--s));height:calc(297mm*var(--s));margin:0 auto 16px;position:relative;box-shadow:0 2px 10px #00000026;background:#fff}
+.sheet{width:210mm;height:297mm;background:#fff;padding:8mm 10mm;position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:top left;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+.cut{text-align:center;font-size:10px;color:#444;letter-spacing:1px;white-space:nowrap;overflow:hidden;margin:1mm 0}
+.form{font-size:12.5px;line-height:1.45}
+.form h2{text-align:center;font-size:17px;margin:0 0 2.5mm;letter-spacing:.5px;position:relative}
+.form h2 .copy{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;letter-spacing:0}
+table.ct{border-collapse:collapse;width:100%;table-layout:fixed}
+.ct td,.ct th{border:1px solid #000;padding:1.6mm 2mm;vertical-align:middle;word-break:break-all}
+.ct th{font-weight:700;text-align:center;white-space:nowrap}
+.ct.wk td,.ct.wk th{text-align:center;padding:1.2mm 1mm}
+.ct.wk td{height:12mm;font-size:11.5px;line-height:1.25}
+.notes{margin-top:3mm;font-size:11px;line-height:1.5}
+.u{display:inline-block;border-bottom:1px solid #000;min-width:8em;height:1em}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .top,.panel,.noprint,.pvhead{display:none!important}
+  .app{display:block;padding:0}
+  .sheet-wrap{width:auto;height:auto;margin:0;box-shadow:none}
+  .sheet{position:relative;transform:none}
+}
+@media (max-width:900px){
+  .app{flex-direction:column;padding:10px 10px 90px}
+  .panel{width:100%;position:static;max-height:none;overflow:visible}
+  .preview{width:100%}
+  .actions{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 8px #0000001a}
+  .top{padding:12px 14px}
+}
+</style>
+</head>
+<body>
+<header class="top noprint"><h1>學生課後活動家長同意書</h1><p>新北市立永平高中 · 平時課後練習</p>
+<nav><a href="index.html">場地借用申請表</a><a class="on" href="consent.html">家長同意書</a></nav></header>
+<div class="app">
+<div class="panel noprint">
+
+  <section class="card">
+    <h2>🔗 從場地借用單帶入</h2>
+    <p class="hint" id="impNote">會自動帶入你在「場地借用申請表」填的社團、場地、人數與時段。</p>
+    <button class="btn block" id="reimport" style="margin-top:8px">重新從借用單帶入</button>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">1</span>活動資料</h2>
+    <label>主辦單位(社團)<input type="text" id="unit"></label>
+    <div class="row"><label>活動名稱<input type="text" id="aname"></label><label>參加人數<input type="number" min="0" id="count" inputmode="numeric"></label></div>
+    <label>活動地點<input type="text" id="place"></label>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">2</span>老師教練</h2>
+    <label>姓名(例:顏老師、顏教練)<input type="text" id="tname"></label>
+    <label>連絡電話<input type="tel" id="tphone" inputmode="tel"></label>
+    <div class="chips"><label class="chip"><input type="radio" name="follow" value="1" checked><span>是否隨行:是</span></label><label class="chip"><input type="radio" name="follow" value="0"><span>否</span></label></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">3</span>主辦學生</h2>
+    <div class="row"><label>姓名<input type="text" id="sname"></label><label>職稱<input type="text" id="stitle" placeholder="社長"></label></div>
+    <div class="row"><label>連絡電話<input type="tel" id="sphone" inputmode="tel"></label><label>班級座號<input type="text" id="scls" placeholder="2年8班1號"></label></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">4</span>活動時間</h2>
+    <div class="chips"><label class="chip"><input type="radio" name="mode" value="multi" checked><span>多次(一個月為限)</span></label><label class="chip"><input type="radio" name="mode" value="single"><span>單次</span></label></div>
+    <div id="multiBox">
+      <label>月份<select id="month"></select></label>
+      <label>日期(可手動修改)<input type="text" id="dates" placeholder="12/4、6、8、11"></label>
+      <p class="hint" style="margin-top:8px">每週時間(依借用單自動帶入,可手動修改):</p>
+      <div class="wkgrid" id="wkHead"></div>
+      <div class="wkgrid" id="wkIn"></div>
+    </div>
+    <div id="singleBox" style="display:none">
+      <label>日期<input type="date" id="sdate"></label>
+      <div class="row"><label>開始<input type="time" id="sstart"></label><label>結束<input type="time" id="send"></label></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>✅ 送出前檢查</h2>
+    <ul class="warn" id="warn"></ul>
+  </section>
+
+  <div class="actions"><button class="btn primary" id="pdf">下載 PDF</button><button class="btn" id="reset">清空</button></div>
+  <div id="syncOut" class="hint" aria-live="polite"></div>
+  <p class="hint">家長的姓名、簽名、意見與日期,列印後請家長手寫。</p>
+</div>
+<div class="preview">
+  <p class="pvhead noprint" id="pvhead"></p>
+  <div id="preview"></div>
+</div>
+</div>
+
+<script>
+const VKEY="venueForm.v1", CKEY="consentForm.v1";
+// 自動上傳到管理員的 Google 雲端(見 apps-script/Code.gs 與 README.md);留空則不上傳
+/*UPLOAD-START*/const UPLOAD_URL="https://script.google.com/macros/s/AKfycbwxhbTCcyvgl3X7jKuvEyhmkWsLoo7bj2WptBBbL02ALK0-MMbAcjKSmmlETIzZf1Z4/exec", UPLOAD_TOKEN="ZR0VJ31fk1UdTAdP";/*UPLOAD-END*/
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const WD="日一二三四五六", WORDER=[1,2,3,4,5,6,0];
+const blankS=()=>({unit:"",aname:"課後練習",place:"",count:"",tname:"",tphone:"",follow:"1",sname:"",stitle:"社長",sphone:"",scls:"",mode:"multi",month:"",dates:"",wk:{1:"",2:"",3:"",4:"",5:"",6:"",0:""},sdate:"",sstart:"",send:"",slots:[]});
+let S=blankS();
+try{Object.assign(S,JSON.parse(localStorage.getItem(CKEY)||"{}"));S.wk=Object.assign(blankS().wk,S.wk||{})}catch(e){}
+const textIds=["unit","aname","place","count","tname","tphone","sname","stitle","sphone","scls","dates","sdate","sstart","send"];
+
+// ---------- import from venue form ----------
+const ymd=d=>d.split("-").map(Number);
+function monthsOf(slots){return [...new Set(slots.filter(s=>s.date).map(s=>s.date.slice(0,7)))].sort()}
+function recompute(){ // dates + weekday grid for the chosen month, from S.slots
+  const list=S.slots.filter(s=>s.date&&s.date.slice(0,7)===S.month).sort((a,b)=>a.date<b.date?-1:1);
+  const days=[...new Set(list.map(s=>+ymd(s.date)[2]))];
+  const m=S.month?+S.month.split("-")[1]:0;
+  S.dates=days.length?m+"/"+days.join("、"):"";
+  const wk={1:[],2:[],3:[],4:[],5:[],6:[],0:[]};
+  list.forEach(s=>{const [y,mm,d]=ymd(s.date);const w=new Date(y,mm-1,d).getDay();const t=(s.start||"")+"~"+(s.end||"");if(!wk[w].includes(t))wk[w].push(t)});
+  WORDER.forEach(w=>S.wk[w]=wk[w].join("、"));
+}
+function importVenue(){
+  let V={};try{V=JSON.parse(localStorage.getItem(VKEY)||"{}")}catch(e){}
+  if(!V||!V.club&&!(V.slots&&V.slots.some(s=>s.date))){$("impNote").textContent="還沒有借用單的資料。請先到「場地借用申請表」填寫,再回來按「重新從借用單帶入」。";return false}
+  S.unit=V.club||S.unit;
+  const places=(V.venues||[]).concat(V.vother?[V.vother]:[]).concat(V.vclass?[V.vclass+"教室"]:[]);
+  if(places.length)S.place=places.join("、");
+  const ml=(V.members||"").split(/[\n,，、;；]+/).map(x=>x.trim()).filter(Boolean);
+  S.count=V.total||(ml.length?String(ml.length):S.count);
+  S.sname=V.pname||V.aname||S.sname;S.scls=V.pcls||V.acls||S.scls;S.sphone=V.aphone||S.sphone;S.stitle=V.pname?"社長":S.stitle;
+  S.slots=(V.slots||[]).filter(s=>s.date).map(s=>({date:s.date,start:s.start,end:s.end}));
+  const ms=monthsOf(S.slots);S.month=ms.includes(S.month)?S.month:(ms[0]||"");
+  const f=S.slots.slice().sort((a,b)=>a.date<b.date?-1:1)[0];
+  if(f){S.sdate=f.date;S.sstart=f.start;S.send=f.end}
+  recompute();
+  $("impNote").textContent="已從借用單帶入"+(S.slots.length?"("+S.slots.length+" 筆時段,"+ms.length+" 個月)":"")+"。請確認下方資料,並補上老師教練。";
+  return true;
+}
+
+// ---------- panel ----------
+$("wkHead").innerHTML=WORDER.map(w=>`<div>週${WD[w]}</div>`).join("");
+$("wkIn").innerHTML=WORDER.map(w=>`<input type="text" data-wk="${w}" aria-label="週${WD[w]}時間">`).join("");
+function load(){
+  textIds.forEach(id=>$(id).value=S[id]||"");
+  document.querySelectorAll('input[name=follow]').forEach(r=>r.checked=r.value===S.follow);
+  document.querySelectorAll('input[name=mode]').forEach(r=>r.checked=r.value===S.mode);
+  document.querySelectorAll("[data-wk]").forEach(i=>i.value=S.wk[i.dataset.wk]||"");
+  const ms=monthsOf(S.slots);
+  $("month").innerHTML=ms.length?ms.map(m=>`<option value="${m}" ${m===S.month?"selected":""}>${(+m.slice(0,4)-1911)}年${+m.slice(5)}月</option>`).join(""):'<option value="">(尚無時段)</option>';
+  $("multiBox").style.display=S.mode==="multi"?"block":"none";
+  $("singleBox").style.display=S.mode==="single"?"block":"none";
+}
+function save(){try{localStorage.setItem(CKEY,JSON.stringify(S))}catch(e){}render()}
+textIds.forEach(id=>$(id).addEventListener("input",()=>{S[id]=$(id).value;save()}));
+document.querySelectorAll('input[name=follow]').forEach(r=>r.addEventListener("change",()=>{S.follow=r.value;save()}));
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener("change",()=>{S.mode=r.value;load();save()}));
+$("month").addEventListener("change",e=>{S.month=e.target.value;recompute();load();save()});
+document.querySelectorAll("[data-wk]").forEach(i=>i.addEventListener("input",()=>{S.wk[i.dataset.wk]=i.value;save()}));
+$("reimport").onclick=()=>{if(importVenue()){load();save();toast("已重新帶入借用單資料")}else{toast("還沒有借用單的資料")}};
+function toast(t){let e=$("toast");if(!e){e=document.createElement("div");e.id="toast";e.className="noprint";e.style.cssText="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui,sans-serif;z-index:50;max-width:90vw;text-align:center";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",6000)}
+let armed=0;
+$("reset").onclick=()=>{if(armed){clearTimeout(armed);armed=0;try{localStorage.removeItem(CKEY)}catch(e){}S=blankS();load();render();return}toast("要清空目前內容?(再按一次確認)");armed=setTimeout(()=>armed=0,5000)};
+
+// ---------- checks ----------
+function renderWarn(){
+  const w=[];
+  if(!S.unit.trim())w.push("尚未填主辦單位(社團)");
+  if(!S.place.trim())w.push("尚未填活動地點");
+  if(!S.tname.trim())w.push("尚未填老師教練");
+  if(!S.sname.trim())w.push("尚未填主辦學生");
+  if(!S.count)w.push("尚未填參加人數");
+  if(S.mode==="multi"){
+    if(!S.dates.trim())w.push("尚未有活動日期(請先在借用單填時段,或手動輸入)");
+    if(!S.month)w.push("尚未選月份");
+    if(monthsOf(S.slots).length>1)w.push("借用單的時段跨了多個月,同意書「多次」以一個月為限,請分月份各產生一份");
+  }else if(!S.sdate)w.push("尚未選日期");
+  const late=S.mode==="single"?(S.send>"18:00"):S.slots.some(s=>s.date&&s.date.slice(0,7)===S.month&&s.end>"18:00");
+  if(late&&S.follow!=="1")w.push("練習超過 18:00,須有指導老師或教練全程隨同,否則校方不予核准");
+  $("warn").innerHTML=w.length?w.map(x=>`<li>⚠ ${esc(x)}</li>`).join(""):'<li class="ok">✔ 資料看起來完整</li>';
+}
+
+// ---------- form ----------
+const U=n=>"＿".repeat(n);
+function weekGrid(){
+  let cells;
+  if(S.mode==="single"&&S.sdate){const [y,m,d]=ymd(S.sdate);const w=new Date(y,m-1,d).getDay();cells=WORDER.map(x=>x===w?(S.sstart||"")+"<br>"+(S.send||""):"")}
+  else cells=WORDER.map(w=>esc(S.wk[w]||"").replace(/~/g,"<br>"));
+  return `<table class="ct wk" style="margin-top:-1px"><tr>${WORDER.map(w=>`<th>星期${WD[w]}</th>`).join("")}</tr><tr>${cells.map(c=>`<td>${c}</td>`).join("")}</tr></table>`;
+}
+function timeRows(){
+  let single,multi;
+  if(S.mode==="single"&&S.sdate){const [y,m,d]=ymd(S.sdate);const w=WD[new Date(y,m-1,d).getDay()];
+    single=`■單次　${y-1911}年${m}月${d}日（${w}）時間:${esc(S.sstart)}-${esc(S.send)}`;
+    multi=`□多次　　年　　月（一個月為限）日期：`}
+  else if(S.mode==="multi"){
+    single=`□單次　　年　　月　　日（　）時間:`;
+    const y=S.month?(+S.month.slice(0,4)-1911):"",m=S.month?+S.month.slice(5):"";
+    multi=`■多次　${y?y+"年"+m+"月":"　　年　　月"}（一個月為限）日期：${esc(S.dates)}`}
+  else{single=`■單次　　年　　月　　日（　）時間:`;multi=`□多次　　年　　月（一個月為限）日期：`}
+  return {single,multi};
+}
+function form(copy){
+  const t=timeRows();
+  const follow=S.follow==="1"?"●是　□否":"□是　●否";
+  const stu=`${esc(S.sname)}　職稱：${esc(S.stitle)}　連絡電話：${esc(S.sphone)}　（${esc(S.scls)||"　　年　　班　　號"}）`;
+  const head=copy===1?`新北市立永平高級中學 學生課後活動 家長同意書<span class="copy">社團活動組留存聯</span>`:`新北市立永平高級中學　家長同意書<span class="copy">家長留存聯</span>`;
+  const tail=copy===1?`<table class="ct" style="margin-top:-1px"><tr><td style="padding:3mm 3mm 2.5mm">
+      <div><b>□同意　□不同意　</b>❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
+      <div style="margin-top:4mm"><b>家長意見：</b>${U(34)}</div>
+      <div style="margin-top:4mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
+      <div class="notes">(1)未繳交家長同意書<b>而擅自留校練習／活動者</b>，依校規懲處（記警告）。(2)經抽查如非家長親自簽名，依校規懲處（記警告）。(3)社團活動練習時間如逾<b>18:00</b>，須有指導老師或教練<b>全程隨同</b>，否則校方<b>不予核准</b>。經抽查違規擅留者，<b>暫停該社團場地借用及練習權限一個月</b>。(4)若學生自主活動無指導老師隨行，經家長同意後，則活動由主辦學生與參與同學自行負責。</div>
+    </td></tr></table>`
+  :`<table class="ct" style="margin-top:-1px"><tr><td style="padding:3mm">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
+  return `<div class="form"><h2>${head}</h2>
+  <table class="ct"><colgroup><col style="width:15%"><col style="width:24%"><col style="width:13%"><col style="width:22%"><col style="width:12%"><col style="width:14%"></colgroup>
+   <tr><th>姓　名</th><td>（　　年　　班　　號）</td><th>連絡電話</th><td colspan="3"></td></tr>
+   <tr><th>主辦單位</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td><th>活動地點</th><td>${esc(S.place)}</td></tr>
+   <tr><th>老師教練</th><td colspan="5">${esc(S.tname)}　連絡電話：${esc(S.tphone)}　是否隨行：${follow}</td></tr>
+   <tr><th>主辦學生</th><td colspan="5">${stu}</td></tr>
+   <tr><th>活動時間</th><td colspan="3">${t.single}</td><th>參加人數</th><td>${S.count?esc(S.count)+" 人":"　　　人"}</td></tr>
+   <tr><td colspan="6">${t.multi}</td></tr>
+  </table>${weekGrid()}${tail}</div>`;
+}
+const CUT="✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂";
+function render(){
+  $("preview").innerHTML=`<div class="sheet-wrap"><div class="sheet">${form(1)}<div class="cut">${CUT}</div>${form(2)}</div></div>`;
+  $("pvhead").textContent="預覽 · A4 共 1 頁(實際列印為原尺寸)";
+  fit();renderWarn();
+}
+function fit(){
+  const w=$("preview").clientWidth;if(!w)return;
+  const s=Math.min(1,Math.max(.3,(w-4)/793.7));
+  document.documentElement.style.setProperty("--s",s.toFixed(4));
+}
+window.addEventListener("resize",fit);
+
+// ---------- PDF ----------
+function loadScript(src){return new Promise((ok,no)=>{if(document.querySelector('script[src="'+src+'"]'))return ok();const e=document.createElement("script");e.src=src;e.onload=ok;e.onerror=()=>no(new Error("load "+src));document.head.appendChild(e)})}
+const blobToB64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(",")[1]);r.onerror=no;r.readAsDataURL(b)});
+async function makePdf(){
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
+  const root=document.documentElement;
+  root.style.setProperty("--s","1");
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  try{
+    const c=await html2canvas(document.querySelector(".sheet"),{scale:2,backgroundColor:"#ffffff",useCORS:true,scrollX:0,scrollY:-window.scrollY});
+    pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",0,0,210,297);
+  }finally{fit()}
+  return pdf.output("blob");
+}
+function pdfName(){
+  let when="";
+  if(S.mode==="multi"&&S.month)when="_"+(+S.month.slice(0,4)-1911)+"年"+(+S.month.slice(5))+"月";
+  else if(S.mode==="single"&&S.sdate)when="_"+S.sdate;
+  return `家長同意書_${S.unit||"未填社團"}${when}.pdf`;
+}
+$("pdf").onclick=async()=>{
+  const btn=$("pdf"),t=btn.textContent;btn.disabled=true;btn.textContent="產生中…";
+  try{
+    const blob=await makePdf(),name=pdfName();
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+    if(UPLOAD_URL){
+      const so=$("syncOut");so.textContent="⏳ 正在同步到管理員雲端…";
+      blobToB64(blob).then(b64=>fetch(UPLOAD_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:UPLOAD_TOKEN,filename:name,base64:b64})}))
+        .then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+        .then(j=>{const ok=j&&j.ok;so.textContent=ok?"✔ 已同步到管理員雲端:"+(j.name||name):"✖ 同步失敗:"+((j&&j.error)||"未知原因");toast(ok?"已同步存到管理員的雲端":"同步到管理員雲端失敗")})
+        .catch(e=>{so.textContent="✖ 同步失敗(連線問題):"+(e&&e.message||e)+"。PDF 已下載到你的裝置,請稍後再試或洽管理員。";toast("無法同步到管理員雲端")});
+    }
+    toast("PDF 已產生:"+name);
+  }catch(e){toast("產生 PDF 失敗:"+(e&&e.message||e)+"。請檢查網路後再試一次。")}
+  btn.disabled=false;btn.textContent=t;
+};
+
+// first visit: pull data from the venue form
+if(!S.unit&&!S.place&&!S.slots.length)importVenue();
+load();render();
+</script>
+</body>
+</html>
