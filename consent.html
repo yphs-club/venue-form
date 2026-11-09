@@ -44,22 +44,27 @@ button{font:inherit;cursor:pointer}
 .warn{list-style:none;margin:0;padding:0;font-size:13.5px}
 .warn li{margin:0 0 6px;padding:7px 10px;border-radius:8px;background:var(--warn-bg);color:var(--warn)}
 .warn li.ok{background:var(--ok-bg);color:var(--ok)}
+.warn li.info{background:#efe8f7;color:#654a8e}
 .actions{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 0 4px;background:linear-gradient(to top,var(--bg) 70%,#f2edf600)}
 .actions .primary{flex:2}.actions .btn:not(.primary){flex:1}
 .pvhead{font-family:system-ui,"Noto Sans TC",sans-serif;font-size:13px;color:var(--muted);margin:0 0 8px;text-align:center}
 .preview{flex:1;min-width:0}
 .sheet-wrap{width:calc(210mm*var(--s));height:calc(297mm*var(--s));margin:0 auto 16px;position:relative;box-shadow:0 2px 10px #00000026;background:#fff}
-.sheet{width:210mm;height:297mm;background:#fff;padding:8mm 10mm;position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:top left;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
-.cut{text-align:center;font-size:10px;color:#444;letter-spacing:1px;white-space:nowrap;overflow:hidden;margin:1mm 0}
-.form{font-size:12.5px;line-height:1.45}
-.form h2{text-align:center;font-size:17px;margin:0 0 2.5mm;letter-spacing:.5px;position:relative}
-.form h2 .copy{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;letter-spacing:0}
-table.ct{border-collapse:collapse;width:100%;table-layout:fixed}
-.ct td,.ct th{border:1px solid #000;padding:1.6mm 2mm;vertical-align:middle;word-break:break-all}
+.sheet{width:210mm;height:297mm;background:#fff;padding:10mm 12mm;position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:top left;overflow:hidden;display:flex;flex-direction:column}
+.cut{text-align:center;font-size:10px;color:#444;letter-spacing:1px;white-space:nowrap;overflow:hidden;margin:3.5mm 0;flex:none}
+.form{font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;min-height:0}
+.form.c1{flex:1.4 1 0}
+.form.c2{flex:1 1 0}
+.form h2{text-align:center;font-size:19px;margin:0 0 3mm;letter-spacing:.5px;position:relative;flex:none}
+.form h2 .copy{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:11.5px;font-weight:700;letter-spacing:0}
+table.ct{border-collapse:collapse;width:100%;table-layout:fixed;flex:none}
+table.ct.tail{flex:1 1 auto}
+.ct td,.ct th{border:1px solid #000;padding:2mm 2.5mm;vertical-align:middle;word-break:break-all;height:10mm}
 .ct th{font-weight:700;text-align:center;white-space:nowrap}
-.ct.wk td,.ct.wk th{text-align:center;padding:1.2mm 1mm}
-.ct.wk td{height:12mm;font-size:11.5px;line-height:1.25}
-.notes{margin-top:3mm;font-size:11px;line-height:1.5}
+.ct.wk td,.ct.wk th{text-align:center;padding:1.4mm 1mm}
+.ct.wk th{height:9mm}
+.ct.wk td{height:15mm;font-size:12.5px;line-height:1.3}
+.notes{margin-top:3.5mm;font-size:11.5px;line-height:1.55}
 .u{display:inline-block;border-bottom:1px solid #000;min-width:8em;height:1em}
 @media print{
   @page{size:A4;margin:0}
@@ -156,11 +161,15 @@ const textIds=["unit","aname","place","count","tname","tphone","sname","stitle",
 // ---------- import from venue form ----------
 const ymd=d=>d.split("-").map(Number);
 function monthsOf(slots){return [...new Set(slots.filter(s=>s.date).map(s=>s.date.slice(0,7)))].sort()}
+function activeSlots(){const ds=S.slots.filter(s=>s.date);return S.month?ds.filter(s=>s.date.slice(0,7)===S.month):ds}
+function monthLabel(){ // e.g. 115年12月
+  if(!S.month)return "";const [y,m]=S.month.split("-").map(Number);return (y-1911)+"年"+m+"月";
+}
 function recompute(){ // dates + weekday grid for the chosen month, from S.slots
-  const list=S.slots.filter(s=>s.date&&s.date.slice(0,7)===S.month).sort((a,b)=>a.date<b.date?-1:1);
-  const days=[...new Set(list.map(s=>+ymd(s.date)[2]))];
-  const m=S.month?+S.month.split("-")[1]:0;
-  S.dates=days.length?m+"/"+days.join("、"):"";
+  const list=activeSlots().sort((a,b)=>a.date<b.date?-1:1);
+  const seen=new Set(),toks=[];let pm=-1;
+  list.forEach(s=>{if(seen.has(s.date))return;seen.add(s.date);const [y,m,d]=ymd(s.date);const key=y*12+m;toks.push(key===pm?String(d):m+"/"+d);pm=key});
+  S.dates=toks.join("、");
   const wk={1:[],2:[],3:[],4:[],5:[],6:[],0:[]};
   list.forEach(s=>{const [y,mm,d]=ymd(s.date);const w=new Date(y,mm-1,d).getDay();const t=(s.start||"")+"~"+(s.end||"");if(!wk[w].includes(t))wk[w].push(t)});
   WORDER.forEach(w=>S.wk[w]=wk[w].join("、"));
@@ -192,7 +201,8 @@ function load(){
   document.querySelectorAll('input[name=mode]').forEach(r=>r.checked=r.value===S.mode);
   document.querySelectorAll("[data-wk]").forEach(i=>i.value=S.wk[i.dataset.wk]||"");
   const ms=monthsOf(S.slots);
-  $("month").innerHTML=ms.length?ms.map(m=>`<option value="${m}" ${m===S.month?"selected":""}>${(+m.slice(0,4)-1911)}年${+m.slice(5)}月</option>`).join(""):'<option value="">(尚無時段)</option>';
+  const opts=ms.map(m=>[m,(+m.slice(0,4)-1911)+"年"+(+m.slice(5))+"月"]);
+  $("month").innerHTML=opts.length?opts.map(o=>`<option value="${o[0]}" ${o[0]===S.month?"selected":""}>${o[1]}</option>`).join(""):'<option value="">(尚無時段)</option>';
   $("multiBox").style.display=S.mode==="multi"?"block":"none";
   $("singleBox").style.display=S.mode==="single"?"block":"none";
 }
@@ -218,11 +228,12 @@ function renderWarn(){
   if(S.mode==="multi"){
     if(!S.dates.trim())w.push("尚未有活動日期(請先在借用單填時段,或手動輸入)");
     if(!S.month)w.push("尚未選月份");
-    if(monthsOf(S.slots).length>1)w.push("借用單的時段跨了多個月,同意書「多次」以一個月為限,請分月份各產生一份");
   }else if(!S.sdate)w.push("尚未選日期");
-  const late=S.mode==="single"?(S.send>"18:00"):S.slots.some(s=>s.date&&s.date.slice(0,7)===S.month&&s.end>"18:00");
+  const late=S.mode==="single"?(S.send>"18:00"):activeSlots().some(s=>s.end>"18:00");
   if(late&&S.follow!=="1")w.push("練習超過 18:00,須有指導老師或教練全程隨同,否則校方不予核准");
-  $("warn").innerHTML=w.length?w.map(x=>`<li>⚠ ${esc(x)}</li>`).join(""):'<li class="ok">✔ 資料看起來完整</li>';
+  const ms=monthsOf(S.slots);
+  const info=(S.mode==="multi"&&ms.length>1)?`<li class="info">ℹ 借用單的時段橫跨 ${ms.length} 個月,同意書每份只含一個月。目前是 ${esc(monthLabel())},要其他月份請在「月份」選單切換,各下載一份。</li>`:"";
+  $("warn").innerHTML=(w.length?w.map(x=>`<li>⚠ ${esc(x)}</li>`).join(""):'<li class="ok">✔ 資料看起來完整</li>')+info;
 }
 
 // ---------- form ----------
@@ -240,8 +251,8 @@ function timeRows(){
     multi=`□多次　　年　　月（一個月為限）日期：`}
   else if(S.mode==="multi"){
     single=`□單次　　年　　月　　日（　）時間:`;
-    const y=S.month?(+S.month.slice(0,4)-1911):"",m=S.month?+S.month.slice(5):"";
-    multi=`■多次　${y?y+"年"+m+"月":"　　年　　月"}（一個月為限）日期：${esc(S.dates)}`}
+    const lab=monthLabel();
+    multi=`■多次　${lab||"　　年　　月"}（一個月為限）日期：${esc(S.dates)}`}
   else{single=`■單次　　年　　月　　日（　）時間:`;multi=`□多次　　年　　月（一個月為限）日期：`}
   return {single,multi};
 }
@@ -250,14 +261,14 @@ function form(copy){
   const follow=S.follow==="1"?"●是　□否":"□是　●否";
   const stu=`${esc(S.sname)}　職稱：${esc(S.stitle)}　連絡電話：${esc(S.sphone)}　（${esc(S.scls)||"　　年　　班　　號"}）`;
   const head=copy===1?`新北市立永平高級中學 學生課後活動 家長同意書<span class="copy">社團活動組留存聯</span>`:`新北市立永平高級中學　家長同意書<span class="copy">家長留存聯</span>`;
-  const tail=copy===1?`<table class="ct" style="margin-top:-1px"><tr><td style="padding:3mm 3mm 2.5mm">
+  const tail=copy===1?`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm 4mm 3mm;vertical-align:top">
       <div><b>□同意　□不同意　</b>❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
-      <div style="margin-top:4mm"><b>家長意見：</b>${U(34)}</div>
-      <div style="margin-top:4mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
+      <div style="margin-top:6mm"><b>家長意見：</b>${U(34)}</div>
+      <div style="margin-top:6mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
       <div class="notes">(1)未繳交家長同意書<b>而擅自留校練習／活動者</b>，依校規懲處（記警告）。(2)經抽查如非家長親自簽名，依校規懲處（記警告）。(3)社團活動練習時間如逾<b>18:00</b>，須有指導老師或教練<b>全程隨同</b>，否則校方<b>不予核准</b>。經抽查違規擅留者，<b>暫停該社團場地借用及練習權限一個月</b>。(4)若學生自主活動無指導老師隨行，經家長同意後，則活動由主辦學生與參與同學自行負責。</div>
     </td></tr></table>`
-  :`<table class="ct" style="margin-top:-1px"><tr><td style="padding:3mm">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
-  return `<div class="form"><h2>${head}</h2>
+    :`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm;vertical-align:middle">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
+  return `<div class="form c${copy}"><h2>${head}</h2>
   <table class="ct"><colgroup><col style="width:15%"><col style="width:24%"><col style="width:13%"><col style="width:22%"><col style="width:12%"><col style="width:14%"></colgroup>
    <tr><th>姓　名</th><td>（　　年　　班　　號）</td><th>連絡電話</th><td colspan="3"></td></tr>
    <tr><th>主辦單位</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td><th>活動地點</th><td>${esc(S.place)}</td></tr>
@@ -298,7 +309,7 @@ async function makePdf(){
 }
 function pdfName(){
   let when="";
-  if(S.mode==="multi"&&S.month)when="_"+(+S.month.slice(0,4)-1911)+"年"+(+S.month.slice(5))+"月";
+  if(S.mode==="multi"&&S.month)when="_"+monthLabel();
   else if(S.mode==="single"&&S.sdate)when="_"+S.sdate;
   return `家長同意書_${S.unit||"未填社團"}${when}.pdf`;
 }
