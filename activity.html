@@ -94,8 +94,8 @@ table.ap{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;l
 </style>
 </head>
 <body>
-<header class="top noprint"><h1>學生社團活動申請表</h1><p>新北市立永平高中 · 校內／校外活動申請 + 家長同意書</p>
-<!--NAV-START--><nav><a href="index.html">場地借用申請表</a><a href="consent.html">家長同意書</a><a class="on" href="activity.html">活動申請表</a></nav><!--NAV-END--></header>
+<header class="top noprint"><h1>學生社團活動申請表</h1><p>新北市立永平高中 · 校內／校外活動申請</p>
+<!--NAV-START--><nav><a href="index.html">場地借用申請表</a><a href="consent.html">家長同意書(平時練習)</a><a class="on" href="activity.html">活動申請表</a></nav><!--NAV-END--></header>
 <div class="app">
 <div class="panel noprint">
 
@@ -141,9 +141,9 @@ table.ap{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;l
     <ul class="warn" id="warn"></ul>
   </section>
 
-  <div class="actions"><button class="btn primary" id="pdf">下載 PDF(2 頁)</button><button class="btn" id="reset">清空</button></div>
+  <div class="actions"><button class="btn primary" id="pdf">下載申請表 PDF</button><button class="btn" id="reset">清空</button></div>
   <div id="syncOut" class="hint" aria-live="polite"></div>
-  <p class="hint">第 1 頁:活動申請表;第 2 頁:家長同意書(社團活動組留存聯 + 家長留存聯)。指導老師簽章、各處室簽核與家長簽名請列印後手寫。</p>
+  <p class="hint">請列印後請指導老師簽章,再送學務處核章。核准後,由學務處產生家長同意書給同學簽名。</p>
 </div>
 <div class="preview">
   <p class="pvhead noprint" id="pvhead"></p>
@@ -159,9 +159,11 @@ const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const WD="日一二三四五六", WORDER=[1,2,3,4,5,6,0];
 const TYPES=["舉辦活動","訓練","會議","成果發表","參加比賽","外校活動","其他"];
 const todayISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
-const blankS=()=>({scope:"校內",adate:todayISO(),unit:"",aname:"",place:"",types:[],desc:"",fee:"",sd:"",st:"",ed:"",et:"",scls:"",sname:"",sphone:"",stitle:"社長",tname:"",tphone:"",lname:"",lrole:"",lphone:"",inn:"",out:"",members:""});
+const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const blankS=()=>({appId:newId(),scope:"校內",adate:todayISO(),unit:"",aname:"",place:"",types:[],desc:"",fee:"",sd:"",st:"",ed:"",et:"",scls:"",sname:"",sphone:"",stitle:"社長",tname:"",tphone:"",lname:"",lrole:"",lphone:"",inn:"",out:"",members:""});
 let S=blankS();
 try{Object.assign(S,JSON.parse(localStorage.getItem(AKEY)||"{}"))}catch(e){}
+if(!S.appId)S.appId=newId();
 const textIds=["adate","unit","aname","place","desc","fee","sd","st","ed","et","scls","sname","sphone","stitle","tname","tphone","lname","lrole","lphone","inn","out","members"];
 const ymd=d=>d.split("-").map(Number);
 const roc=d=>{const [y,m,dd]=ymd(d);return {y:y-1911,m,d:dd,w:WD[new Date(y,m-1,dd).getDay()]}};
@@ -252,54 +254,9 @@ function page1(){
    <tr><td colspan="2" style="height:16mm"></td><td colspan="2"></td><td colspan="2"></td><td colspan="3"></td></tr>
   </table></div>`;
 }
-/* ---------- consent (page 2) ---------- */
-function timeRows(){
-  if(!S.sd)return {single:`■單次　　年　　月　　日（　）時間:`,multi:`□多次　　年　　月（一個月為限）日期：`};
-  const a=roc(S.sd),b=S.ed?roc(S.ed):a;
-  const same=!S.ed||S.ed===S.sd;
-  const tm=same?`${esc(S.st)}-${esc(S.et)}`:`${esc(S.st)} 起，至 ${b.m}月${b.d}日（${b.w}）${esc(S.et)} 止`;
-  return {single:`■單次　${a.y}年${a.m}月${a.d}日（${a.w}）時間:${tm}`,multi:`□多次　　年　　月（一個月為限）日期：`};
-}
-function weekGrid(){
-  const cells={1:"",2:"",3:"",4:"",5:"",6:"",0:""};
-  if(S.sd){
-    const [y,m,d]=ymd(S.sd),e=S.ed?ymd(S.ed):[y,m,d];
-    const start=new Date(y,m-1,d),end=new Date(e[0],e[1]-1,e[2]);
-    const days=Math.round((end-start)/864e5);
-    if(days===0)cells[start.getDay()]=esc(S.st)+"<br>"+esc(S.et);
-    else for(let i=0;i<=Math.min(days,6);i++){const w=new Date(y,m-1,d+i).getDay();cells[w]=i===0?esc(S.st)+"<br>起":i===days?"至<br>"+esc(S.et):"全天"}
-  }
-  return `<table class="ct wk" style="margin-top:-1px"><tr>${WORDER.map(w=>`<th>星期${WD[w]}</th>`).join("")}</tr><tr>${WORDER.map(w=>`<td>${cells[w]}</td>`).join("")}</tr></table>`;
-}
-function cform(copy){
-  const t=timeRows();
-  const tn=S.lname||S.tname,tp=S.lname?S.lphone:S.tphone;
-  const teacher=`${esc(tn)}${S.lname&&S.lrole?"（"+esc(S.lrole)+"）":""}　連絡電話：${esc(tp)}　是否隨行：${(tn?"●是　□否":"□是　□否")}`;
-  const stu=`${esc(S.sname)}　職稱：${esc(S.stitle)}　連絡電話：${esc(S.sphone)}　（${esc(S.scls)||"　　年　　班　　號"}）`;
-  const head=copy===1?`新北市立永平高級中學 學生課後活動 家長同意書<span class="copy">社團活動組留存聯</span>`:`新北市立永平高級中學　家長同意書<span class="copy">家長留存聯</span>`;
-  const tail=copy===1?`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm 4mm 3mm;vertical-align:top">
-      <div><b>□同意　□不同意</b></div>
-      <div style="margin-top:2mm">❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
-      <div style="margin-top:6mm"><b>家長意見：</b>${U(34)}</div>
-      <div style="margin-top:6mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
-      <div class="notes">(1)未繳交家長同意書<b>而擅自留校練習／活動者</b>，依校規懲處（記警告）。(2)經抽查如非家長親自簽名，依校規懲處（記警告）。(3)社團活動練習時間如逾<b>18:00</b>，須有指導老師或教練<b>全程隨同</b>，否則校方<b>不予核准</b>。經抽查違規擅留者，<b>暫停該社團場地借用及練習權限一個月</b>。(4)若學生自主活動無指導老師隨行，經家長同意後，則活動由主辦學生與參與同學自行負責。</div>
-    </td></tr></table>`
-    :`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm;vertical-align:middle">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
-  return `<div class="form c${copy}"><h2>${head}</h2>
-  <table class="ct"><colgroup><col style="width:15%"><col style="width:26%"><col style="width:13%"><col style="width:14%"><col style="width:14%"><col style="width:18%"></colgroup>
-   <tr><th>姓　名</th><td colspan="2" style="text-align:right">（　　年　　班　　號）</td><th>連絡電話</th><td colspan="2"></td></tr>
-   <tr><th>主辦單位</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td><th>活動地點</th><td>${esc(S.place)}</td></tr>
-   <tr><th>老師教練</th><td colspan="5">${teacher}</td></tr>
-   <tr><th>主辦學生</th><td colspan="5">${stu}</td></tr>
-   <tr><th>活動時間</th><td colspan="3">${t.single}</td><th>參加人數</th><td>${totalCount()?totalCount()+" 人":"　　　人"}</td></tr>
-   <tr><td colspan="6">${t.multi}</td></tr>
-  </table>${weekGrid()}${tail}</div>`;
-}
-const CUT="✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂";
 function render(){
-  const wrap=h=>`<div class="sheet-wrap">${h}</div>`;
-  $("preview").innerHTML=wrap(page1())+wrap(`<div class="sheet">${cform(1)}<div class="cut">${CUT}</div>${cform(2)}</div>`);
-  $("pvhead").textContent="預覽 · A4 共 2 頁(第 1 頁活動申請表、第 2 頁家長同意書)";
+  $("preview").innerHTML=`<div class="sheet-wrap">${page1()}</div>`;
+  $("pvhead").textContent="預覽 · A4 共 1 頁(實際列印為原尺寸)";
   fit();renderWarn();
 }
 function fit(){
@@ -342,6 +299,7 @@ $("pdf").onclick=async()=>{
         .then(j=>{const ok=j&&j.ok;so.textContent=ok?"✔ 已同步到管理員雲端:"+(j.name||name):"✖ 同步失敗:"+((j&&j.error)||"未知原因");toast(ok?"已同步存到管理員的雲端":"同步到管理員雲端失敗")})
         .catch(e=>{so.textContent="✖ 同步失敗(連線問題):"+(e&&e.message||e)+"。PDF 已下載到你的裝置,請稍後再試或洽管理員。";toast("無法同步到管理員雲端")});
     }
+    if(UPLOAD_URL){fetch(UPLOAD_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:UPLOAD_TOKEN,action:"saveApp",id:S.appId,data:S})}).then(r=>r.json()).then(j=>{if(!(j&&j.ok))$("syncOut").textContent+="(申請資料未送出給學務處:"+((j&&j.error)||"未知原因")+")"}).catch(()=>{})}
     toast("PDF 已產生:"+name);
   }catch(e){toast("產生 PDF 失敗:"+(e&&e.message||e)+"。請檢查網路後再試一次。")}
   btn.disabled=false;btn.textContent=t;

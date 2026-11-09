@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>學務處:活動家長同意書</title>
+<style>
+:root{--accent:#7b5ea7;--accent-d:#654a8e;--bg:#f2edf6;--line:#d9cfe4;--text:#1f2937;--muted:#6b7280;--warn:#b45309;--warn-bg:#fef3c7;--ok:#166534;--ok-bg:#dcfce7;--s:1}
+*{box-sizing:border-box}
+body{margin:0;font-family:"DFKai-SB","BiauKai","標楷體","Noto Serif TC","PMingLiU",serif;background:var(--bg);color:#000}
+.top{background:#7b5ea7;border-bottom:6px solid #b9a3d6;color:#fff;padding:14px 20px;font-family:system-ui,"Noto Sans TC",sans-serif}
+.top h1{margin:0;font-size:20px;letter-spacing:.5px}
+.top p{margin:2px 0 0;font-size:13px;opacity:.9}
+.top nav{margin-top:8px;font-size:14px}
+.top nav a{color:#fff;text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid #ffffff80;margin-right:6px}
+.top nav a.on{background:#fff;color:#654a8e;font-weight:700}
+.app{display:flex;gap:18px;padding:18px;align-items:flex-start;max-width:1400px;margin:0 auto}
+.panel{width:420px;flex:none;font-family:system-ui,"Noto Sans TC",sans-serif;font-size:15px;color:var(--text);position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding-right:2px}
+.card{background:#fff;border:1px solid #e4dbed;border-radius:12px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 1px 3px #5b46801a}
+.card>h2{font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;font-weight:700}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex:none}
+.panel label{display:block;margin:8px 0 0;font-size:13px;color:var(--muted)}
+.panel label.chip{margin:0}
+.panel input[type=text],.panel input[type=tel],.panel input[type=date],.panel input[type=time],.panel input[type=number],.panel textarea,.panel select{width:100%;min-height:40px;padding:8px 10px;margin-top:3px;font:inherit;font-size:15px;color:var(--text);background:#fff;border:1px solid var(--line);border-radius:8px}
+.panel input:focus,.panel textarea:focus,.panel select:focus,button:focus-visible{outline:2px solid #cbbbe3;outline-offset:1px;border-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{position:relative;display:inline-block}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14px;color:var(--text)}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip input:focus-visible+span{outline:2px solid #cbbbe3;outline-offset:1px}
+button{font:inherit;cursor:pointer}
+.btn{padding:9px 14px;min-height:40px;border:1px solid #b9a9d0;border-radius:8px;background:#faf8fc;color:var(--text);font-size:15px}
+.btn:hover{background:#f1eaf7}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.btn.primary:hover{background:var(--accent-d)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.block{width:100%}
+.hint{color:var(--muted);font-size:12.5px;line-height:1.5;margin:6px 0 0}
+.wkgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px}
+.wkgrid div{text-align:center;font-size:12px;color:var(--muted)}
+.wkgrid input{min-height:36px!important;padding:4px 2px!important;font-size:12px!important;text-align:center;margin:0!important}
+.warn{list-style:none;margin:0;padding:0;font-size:13.5px}
+.warn li{margin:0 0 6px;padding:7px 10px;border-radius:8px;background:var(--warn-bg);color:var(--warn)}
+.warn li.ok{background:var(--ok-bg);color:var(--ok)}
+.warn li.info{background:#efe8f7;color:#654a8e}
+.actions{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 0 4px;background:linear-gradient(to top,var(--bg) 70%,#f2edf600)}
+.actions .primary{flex:2}.actions .btn:not(.primary){flex:1}
+.pvhead{font-family:system-ui,"Noto Sans TC",sans-serif;font-size:13px;color:var(--muted);margin:0 0 8px;text-align:center}
+.preview{flex:1;min-width:0}
+.sheet-wrap{width:calc(210mm*var(--s));height:calc(297mm*var(--s));margin:0 auto 16px;position:relative;box-shadow:0 2px 10px #00000026;background:#fff}
+.sheet{width:210mm;height:297mm;background:#fff;padding:10mm 12mm;position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:top left;overflow:hidden;display:flex;flex-direction:column}
+.cut{text-align:center;font-size:10px;color:#444;letter-spacing:1px;white-space:nowrap;overflow:hidden;margin:3.5mm 0;flex:none}
+.form{font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;min-height:0}
+.form.c1{flex:1.4 1 0}
+.form.c2{flex:1 1 0}
+.form h2{text-align:center;font-size:19px;margin:0 0 3mm;letter-spacing:.5px;position:relative;flex:none}
+.form h2 .copy{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:11.5px;font-weight:700;letter-spacing:0}
+table.ct{border-collapse:collapse;width:100%;table-layout:fixed;flex:none}
+table.ct.tail{flex:1 1 auto}
+.ct td,.ct th{border:1px solid #000;padding:2mm 2.5mm;vertical-align:middle;word-break:break-all;height:10mm}
+.ct th{font-weight:700;text-align:center;white-space:nowrap}
+.ct.wk td,.ct.wk th{text-align:center;padding:1.4mm 1mm}
+.ct.wk th{height:9mm}
+.ct.wk td{height:15mm;font-size:12.5px;line-height:1.3}
+.notes{margin-top:3.5mm;font-size:11.5px;line-height:1.55}
+.u{display:inline-block;border-bottom:1px solid #000;min-width:8em;height:1em}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .top,.panel,.noprint,.pvhead{display:none!important}
+  .app{display:block;padding:0}
+  .sheet-wrap{width:auto;height:auto;margin:0;box-shadow:none}
+  .sheet{position:relative;transform:none}
+}
+@media (max-width:900px){
+  .app{flex-direction:column;padding:10px 10px 90px}
+  .panel{width:100%;position:static;max-height:none;overflow:visible}
+  .preview{width:100%}
+  .actions{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 8px #0000001a}
+  .top{padding:12px 14px}
+}
+.sheet.p1{padding:9mm 11mm}
+.ap h2{text-align:center;font-size:19px;margin:0 0 2mm;letter-spacing:.5px}
+.ap .dt{text-align:right;font-size:13.5px;margin:0 0 2mm}
+table.ap{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;line-height:1.4}
+.ap td,.ap th{border:1px solid #000;padding:1.2mm 1.8mm;vertical-align:middle;word-break:break-all;height:9mm}
+.ap th{font-weight:700;text-align:center}
+.ap td.c{text-align:center}
+.ap .mem td{height:7.4mm;padding:.6mm 1.2mm;text-align:center}
+.ap .small{font-size:11.5px;line-height:1.5}
+.ta{min-height:80px}
+.app2{display:block}
+.li{border:1px solid #e4dbed;border-radius:10px;padding:9px 10px;margin:0 0 8px;background:#fff}
+.li b{display:block}.li small{color:var(--muted)}
+.li.done{opacity:.6}
+.tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:#dcfce7;color:#166534;margin-left:6px}
+.li .btn{margin-top:6px;min-height:34px;padding:5px 10px;font-size:14px}
+</style>
+</head>
+<body>
+<header class="top noprint"><h1>學務處:活動家長同意書</h1><p>新北市立永平高中 · 活動申請核章後,由學務處產生家長同意書</p></header>
+<div class="app">
+<div class="panel noprint">
+  <section class="card">
+    <h2>🔒 學務處密碼</h2>
+    <label>密碼<input type="password" id="pass" autocomplete="current-password"></label>
+    <button class="btn primary block" id="load" style="margin-top:8px">載入學生送出的活動申請</button>
+    <div id="loadMsg" class="hint"></div>
+  </section>
+  <section class="card">
+    <h2>📋 活動申請</h2>
+    <label class="chip" style="margin:0 0 8px"><input type="checkbox" id="showDone"><span>顯示已產生過的</span></label>
+    <div id="list"><p class="hint">請先輸入密碼並載入。</p></div>
+  </section>
+  <section class="card" id="editCard" style="display:none">
+    <h2>✏️ 可調整的欄位</h2>
+    <label>老師教練<input type="text" id="e_tname"></label>
+    <label>老師連絡電話<input type="tel" id="e_tphone"></label>
+    <label>活動地點<input type="text" id="e_place"></label>
+    <label>參加人數(同意書上)<input type="number" id="e_cnt"></label>
+  </section>
+  <div class="actions"><button class="btn primary" id="pdf" disabled>下載家長同意書 PDF</button></div>
+  <div id="syncOut" class="hint" aria-live="polite"></div>
+</div>
+<div class="preview">
+  <p class="pvhead noprint" id="pvhead">請從左側選一份已核章的活動申請</p>
+  <div id="preview"></div>
+</div>
+</div>
+<script>
+/*UPLOAD-START*/const UPLOAD_URL="https://script.google.com/macros/s/AKfycbwxhbTCcyvgl3X7jKuvEyhmkWsLoo7bj2WptBBbL02ALK0-MMbAcjKSmmlETIzZf1Z4/exec", UPLOAD_TOKEN="ZR0VJ31fk1UdTAdP";/*UPLOAD-END*/
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const WD="日一二三四五六", WORDER=[1,2,3,4,5,6,0];
+const ymd=d=>d.split("-").map(Number);
+const roc=d=>{const [y,m,dd]=ymd(d);return {y:y-1911,m,d:dd,w:WD[new Date(y,m-1,dd).getDay()]}};
+const U=n=>"＿".repeat(n);
+let S=null,CUR=null,ITEMS=[],cnt="";
+function totalCount(){return cnt||((+S.inn||0)+(+S.out||0))||""}
+/* ---------- consent (page 2) ---------- */
+function timeRows(){
+  if(!S.sd)return {single:`■單次　　年　　月　　日（　）時間:`,multi:`□多次　　年　　月（一個月為限）日期：`};
+  const a=roc(S.sd),b=S.ed?roc(S.ed):a;
+  const same=!S.ed||S.ed===S.sd;
+  const tm=same?`${esc(S.st)}-${esc(S.et)}`:`${esc(S.st)} 起，至 ${b.m}月${b.d}日（${b.w}）${esc(S.et)} 止`;
+  return {single:`■單次　${a.y}年${a.m}月${a.d}日（${a.w}）時間:${tm}`,multi:`□多次　　年　　月（一個月為限）日期：`};
+}
+function weekGrid(){
+  const cells={1:"",2:"",3:"",4:"",5:"",6:"",0:""};
+  if(S.sd){
+    const [y,m,d]=ymd(S.sd),e=S.ed?ymd(S.ed):[y,m,d];
+    const start=new Date(y,m-1,d),end=new Date(e[0],e[1]-1,e[2]);
+    const days=Math.round((end-start)/864e5);
+    if(days===0)cells[start.getDay()]=esc(S.st)+"<br>"+esc(S.et);
+    else for(let i=0;i<=Math.min(days,6);i++){const w=new Date(y,m-1,d+i).getDay();cells[w]=i===0?esc(S.st)+"<br>起":i===days?"至<br>"+esc(S.et):"全天"}
+  }
+  return `<table class="ct wk" style="margin-top:-1px"><tr>${WORDER.map(w=>`<th>星期${WD[w]}</th>`).join("")}</tr><tr>${WORDER.map(w=>`<td>${cells[w]}</td>`).join("")}</tr></table>`;
+}
+function cform(copy){
+  const t=timeRows();
+  const tn=S.lname||S.tname,tp=S.lname?S.lphone:S.tphone;
+  const teacher=`${esc(tn)}${S.lname&&S.lrole?"（"+esc(S.lrole)+"）":""}　連絡電話：${esc(tp)}　是否隨行：${(tn?"●是　□否":"□是　□否")}`;
+  const stu=`${esc(S.sname)}　職稱：${esc(S.stitle)}　連絡電話：${esc(S.sphone)}　（${esc(S.scls)||"　　年　　班　　號"}）`;
+  const head=copy===1?`新北市立永平高級中學 學生課後活動 家長同意書<span class="copy">社團活動組留存聯</span>`:`新北市立永平高級中學　家長同意書<span class="copy">家長留存聯</span>`;
+  const tail=copy===1?`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm 4mm 3mm;vertical-align:top">
+      <div><b>□同意　□不同意</b></div>
+      <div style="margin-top:2mm">❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
+      <div style="margin-top:6mm"><b>家長意見：</b>${U(34)}</div>
+      <div style="margin-top:6mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
+      <div class="notes">(1)未繳交家長同意書<b>而擅自留校練習／活動者</b>，依校規懲處（記警告）。(2)經抽查如非家長親自簽名，依校規懲處（記警告）。(3)社團活動練習時間如逾<b>18:00</b>，須有指導老師或教練<b>全程隨同</b>，否則校方<b>不予核准</b>。經抽查違規擅留者，<b>暫停該社團場地借用及練習權限一個月</b>。(4)若學生自主活動無指導老師隨行，經家長同意後，則活動由主辦學生與參與同學自行負責。</div>
+    </td></tr></table>`
+    :`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm;vertical-align:middle">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
+  return `<div class="form c${copy}"><h2>${head}</h2>
+  <table class="ct"><colgroup><col style="width:15%"><col style="width:26%"><col style="width:13%"><col style="width:14%"><col style="width:14%"><col style="width:18%"></colgroup>
+   <tr><th>姓　名</th><td colspan="2" style="text-align:right">（　　年　　班　　號）</td><th>連絡電話</th><td colspan="2"></td></tr>
+   <tr><th>主辦單位</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td><th>活動地點</th><td>${esc(S.place)}</td></tr>
+   <tr><th>老師教練</th><td colspan="5">${teacher}</td></tr>
+   <tr><th>主辦學生</th><td colspan="5">${stu}</td></tr>
+   <tr><th>活動時間</th><td colspan="3">${t.single}</td><th>參加人數</th><td>${totalCount()?totalCount()+" 人":"　　　人"}</td></tr>
+   <tr><td colspan="6">${t.multi}</td></tr>
+  </table>${weekGrid()}${tail}</div>`;
+}
+const CUT="✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂";
+
+function render(){
+  if(!S){$("preview").innerHTML="";return}
+  $("preview").innerHTML=`<div class="sheet-wrap"><div class="sheet">${cform(1)}<div class="cut">${CUT}</div>${cform(2)}</div></div>`;
+  $("pvhead").textContent="預覽 · "+(S.unit||"")+"「"+(S.aname||"")+"」家長同意書(A4 共 1 頁)";
+  fit();
+}
+function fit(){const w=$("preview").clientWidth;if(!w)return;document.documentElement.style.setProperty("--s",Math.min(1,Math.max(.3,(w-4)/793.7)).toFixed(4))}
+window.addEventListener("resize",fit);
+function toast(t){let e=$("toast");if(!e){e=document.createElement("div");e.id="toast";e.className="noprint";e.style.cssText="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui,sans-serif;z-index:50;max-width:90vw;text-align:center";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",6000)}
+
+try{$("pass").value=sessionStorage.getItem("tpass")||""}catch(e){}
+function renderList(){
+  const show=$("showDone").checked,l=ITEMS.filter(i=>show||!i.done);
+  $("list").innerHTML=l.length?l.map(i=>{const d=i.data||{};return `<div class="li ${i.done?"done":""}"><b>${esc(d.unit||"(未填社團)")}・${esc(d.aname||"(未填活動名稱)")}${i.done?'<span class="tag">已產生</span>':""}</b><small>${esc(d.sd||"")} ${esc(d.st||"")} ~ ${esc(d.ed||"")} ${esc(d.et||"")}　${esc(d.scope||"")}　送出:${esc((i.savedAt||"").replace("T"," "))}</small><br><button class="btn" data-id="${esc(i.id)}">產生家長同意書</button></div>`}).join(""):'<p class="hint">目前沒有待辦的活動申請。</p>';
+  document.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>pick(b.dataset.id));
+}
+$("showDone").onchange=renderList;
+$("load").onclick=async()=>{
+  const p=$("pass").value.trim();if(!p){$("loadMsg").textContent="請輸入密碼";return}
+  $("loadMsg").textContent="⏳ 載入中…";
+  try{
+    const r=await fetch(UPLOAD_URL+"?action=list&pass="+encodeURIComponent(p));const j=await r.json();
+    if(!j.ok){$("loadMsg").textContent=j.error==="bad password"?"✖ 密碼錯誤":"✖ 載入失敗:"+j.error;return}
+    try{sessionStorage.setItem("tpass",p)}catch(e){}
+    ITEMS=j.items||[];$("loadMsg").textContent="✔ 已載入 "+ITEMS.length+" 筆";renderList();
+  }catch(e){$("loadMsg").textContent="✖ 連線失敗:"+(e&&e.message||e)}
+};
+function pick(id){
+  CUR=ITEMS.find(i=>i.id===id);if(!CUR)return;
+  S=Object.assign({},CUR.data);cnt="";
+  $("editCard").style.display="block";
+  $("e_tname").value=S.lname||S.tname||"";$("e_tphone").value=S.lname?S.lphone:S.tphone||"";$("e_place").value=S.place||"";$("e_cnt").value=totalCount();
+  $("pdf").disabled=false;render();window.scrollTo({top:0,behavior:"smooth"});
+}
+function edit(){if(!S)return;
+  if(S.lname){S.lname=$("e_tname").value;S.lphone=$("e_tphone").value}else{S.tname=$("e_tname").value;S.tphone=$("e_tphone").value}
+  S.place=$("e_place").value;cnt=$("e_cnt").value;render()}
+["e_tname","e_tphone","e_place","e_cnt"].forEach(i=>$(i).addEventListener("input",edit));
+
+function loadScript(src){return new Promise((ok,no)=>{if(document.querySelector('script[src="'+src+'"]'))return ok();const e=document.createElement("script");e.src=src;e.onload=ok;e.onerror=()=>no(new Error("load "+src));document.head.appendChild(e)})}
+const blobToB64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(",")[1]);r.onerror=no;r.readAsDataURL(b)});
+async function makePdf(){
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
+  document.documentElement.style.setProperty("--s","1");
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  try{const c=await html2canvas(document.querySelector(".sheet"),{scale:2,backgroundColor:"#ffffff",useCORS:true,scrollX:0,scrollY:-window.scrollY});pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",0,0,210,297)}finally{fit()}
+  return pdf.output("blob");
+}
+$("pdf").onclick=async()=>{
+  if(!S)return;const btn=$("pdf"),t=btn.textContent;btn.disabled=true;btn.textContent="產生中…";
+  try{
+    const blob=await makePdf(),name=`家長同意書_${(S.unit||"未填社團").replace(/_/g,"-")}_${S.sd||"未填日期"}.pdf`;
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+    const so=$("syncOut");so.textContent="⏳ 正在同步到雲端…";
+    const b64=await blobToB64(blob);
+    const r=await fetch(UPLOAD_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:UPLOAD_TOKEN,filename:name,base64:b64})});const j=await r.json();
+    so.textContent=j.ok?"✔ 已同步到雲端:"+j.name:"✖ 同步失敗:"+(j.error||"");
+    if(j.ok){fetch(UPLOAD_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"mark",pass:$("pass").value.trim(),id:CUR.id})}).then(()=>{CUR.done=true;renderList()}).catch(()=>{})}
+    toast("PDF 已產生:"+name);
+  }catch(e){toast("產生 PDF 失敗:"+(e&&e.message||e))}
+  btn.disabled=false;btn.textContent=t;
+};
+render();
+</script>
+</body>
+</html>
