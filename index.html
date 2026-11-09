@@ -288,7 +288,6 @@ function form(label,rows,big,extra){
   }else{
     time=slots.map((s,i)=>`<span class="slotline">${slotLine(i,s)}${i==0?`　${over?"☑":"□"}練習超過18:00`:""}${(i==1||(rows==1&&i==0))?"　督導教師簽名：＿＿＿＿＿＿":""}</span>`).join("")+`<span class="slotline" style="font-size:.9em">(如督導教師臨時無法督導僅練到18:00)</span>`;
   }
-  const firstSign=label.indexOf("總務處")>=0?"社團或導師":"社團組長";
   const m=members();
   const mem=m.length?m.map((x,i)=>`(${i+1})${esc(x)}`).join("；"):"(1)　　　；(2)　　　；(3)";
   return `<div class="form ${big?"big":""}">
@@ -297,13 +296,13 @@ function form(label,rows,big,extra){
    <tr><th>社團名稱</th><td>${esc(S.club)}</td><th>社長</th><td>${esc(S.pcls)}　姓名:${esc(S.pname)}</td></tr>
    <tr><th>申請人</th><td colspan="2">${esc(S.acls)}　姓名:${esc(S.aname)}　手機號碼:${esc(S.aphone)}</td><td>申請日期 ${p?`${p.y}年${p.m}月${p.d}日 星期${p.w}`:"　年　月　日 星期　"}</td></tr>
    <tr><th>借用場地</th><td colspan="3">${venue.join("　")}<br>${other}　　${room}　借用教室班導簽名：＿＿＿＿＿＿</td></tr>
-   <tr><th style="white-space:normal">場地衛生<br><small>(復原、電源關閉與檢查負責人)</small></th><td colspan="3">${sanit}</td></tr>
+   <tr><th style="white-space:normal">場地衛生<br><small>(復原、電源關閉與檢查負責人)</small></th><td colspan="3">${sanit}<div style="margin-top:1mm">未復原或清理場地扣評鑑分數 <span style="border:1px solid #000;padding:0 1.6mm">2</span> 分　電源、燈光等未關扣 <span style="border:1px solid #000;padding:0 1.6mm">2</span> 分(地球暖化中)</div></td></tr>
    <tr><th style="white-space:normal">借用時間<br><small>24時制填寫</small></th><td colspan="3" style="vertical-align:middle;${big?"":"height:23mm"}">${time}</td></tr>
    <tr><th>借用事由</th><td colspan="3" style="height:${big?"16mm":"9mm"}">${esc(S.reason)}</td></tr>
    <tr><th style="white-space:normal">使用場地人員名單</th><td colspan="3" style="height:${big?"22mm":"10mm"}">${(S.total||m.length)?`總人數:${S.total||m.length}人　`:""}${mem}</td></tr>
   </table>
   <table class="sign" style="margin-top:-1px">
-   <tr><th>${firstSign}</th><th>衛生組</th><th>生輔組</th><th>體育組</th></tr><tr><td></td><td></td><td></td><td></td></tr>
+   <tr><th>社團組長</th><th>衛生組</th><th>生輔組</th><th>體育組</th></tr><tr><td></td><td></td><td></td><td></td></tr>
   </table>
   <table class="sign" style="margin-top:-1px">
    <tr><th>學務主任</th><th>總務處幹事</th><th>總務處事務組長</th><th>總務主任</th></tr><tr><td></td><td></td><td></td><td></td></tr>
@@ -342,7 +341,7 @@ try{if(SEED.length&&!localStorage.getItem(HKEY+".seeded")){H=H.concat(SEED);loca
 function histSave(){try{localStorage.setItem(HKEY,JSON.stringify(H))}catch(e){}}
 function histLabel(h){const d=h.data,f=d.slots.find(x=>x.date);
   return `${h.at.slice(0,16).replace("T"," ")}｜${d.club||"(未填社團)"}｜${d.venues.concat(d.vother?[d.vother]:[]).join("、")||"(未選場地)"}｜${d.slots.length}筆${f?"｜"+f.date:""}`}
-/*PUB-START*/const PUB_ENC=null;/*PUB-END*/
+/*PUB-START*/const PUB_ENC={"salt":"BCPq5Gv5f9IXqsbUM7H3Sg==","iter":200000,"items":[{"at":"2026-11-06T15:45:46.550Z","iv":"d2dFWqOPxKXqZuTT","ct":"4A4i0y7X6bPsbezwFTawOevAJ9ZYSZGYRWQtiUzSaq3moETsEm6kyMeIR0GrX1s14L2Uq4O/YrGFuOEBTzZ6M8l06kMP1bhp5AuIZ3il+QTfVhi3c/gtYnNIxEX3AhWuV4gVZHvEwJb2KiusYnfMSksZdwmR0gROGgCFyk0cLeq0z6CUKae/a4ygbKu2llhEspIk6lWYadG+Zhk7y8SPMBmSyPqX5BH44qH8MW9IGFacBEW0myscIoQ0+o9HYbyn6XjzBXNNzklpn+3+94lVyXd2SBA++XVLFlE5VP5egHXdDXe5fmj2ECbzHWJtMg3VZ1VfweNjgxZfUk1sMx8Gr7Ve1KLl3w/T9IOpDzqyi8u+x995VlPzaTFxrELgI2LEsT7jf3t/TtVYo6e+MzS3MWI8ASpBPO/DGMly5tLw9fmvC0UvaeTIQM62HBVsasZtVP4OduHwylZbVpIJP5szULNRJhVQRXJaSXakcncsGL6KtXlUsHcApmZ5v54reVORjUt8HAEkym2aDRsYEP1DLZpXEpFwpU9WA38yZf0ya0u5JRsydEwOyfwGHENtuR0gZ/SxORy5a2O4Yvn4UToh5kzqHYHys9hoE5ZrM4hbWKPalANoFI5OWhL0UZUROoP5nB6FUg9y9fy2hf0gqApcOP4ytS/YK9FHlBDqsj/bVW9xCLYBZNmfEu6sez19lkMNDbQ6E/xOE4ZiQIkjzcU9higXcBS+OQVIJnKObjTA4MGCTDDOuME6sTje737k5240GiO2BR200c4JlDmHYnyt7sNtbYCopODPA/7XrTBNiuSG6D3nA6yRTJiTynh7jYV55B8y049G2L8IXXAxm7Y+2IiklFUVRT4bqwdihaBFiTeewJcboTdoYjgpRlk++FNtIGQ7fdZp9BEFei3fR5NZbElZ3jnfce8zQPQFHsLViUoT3MfHEqRgUWgzUjZdQmHx82u8DtF2k6W4iA3VXo9aUQxIjIbtOpiFsJcHPbC2RYLIxctn72fin4JsGEeIlbtZ/DC9NcNDPJjblncHak33+hItzIV0NAZuZE3uKtuTlzl09ETx/cw0sOPVKthle/SBIvlGJvPWZ0a14THCDX3MLFEBbKGLnMrOq/RAVvvErXLvuXrhEdM9ySHz/0bRDKcG9hym5gdDx/z4LHjefIJbvEcEnuBWDjSTtFOLhSXlrGtgAbk04mFqT+YVBmjl6zD5LtZk3skMc8GvlanuRLZONKUXASH1+kDubiq0xZ7DRlf9LbMhWe1VF7EM7QPJQZCb"},{"at":"2026-11-06T15:53:41.819Z","iv":"bTbuu7QECyynAPkp","ct":"Pk1B/4Jiu5L+gEgtj1xkD62YJEV/cIQzqV//GDh1gdrQxqL0aUltSxDLgM/pm062I9Aolyu9vm/mTHAWqJLseKutHoZuAoxc+7x02KdEUnamLyXsxlHDnfDGA+LG/xyND3dfBB/xWga2J8+7CerT+mLcfNK7wFxcNTAeDNSEM8EJSFLxklKGstDwtvFXt/roj3uOC4mDLrpY5kAPRw7+1qQx5uQB7AUSeatoo9/ft0rS4ECD+ZcTa4Rq1IPkMH2f8+KIpuSm6y4Yj3mP2aQE+xB2PozRiTvaDxc4XUoDiuadahormoXBHkChDrWcaCCGo657GLO2dvUaNQDlL2TZ7k4yFXHoil8vWfT0Dm+LzolIz4kptBWUka6o2B528AzjmWH1QGqvM2+CRB5R/xWXTNUfck3jPluy3/P3WUrx2zmegn6RupmvNYNvfyoCIVkVt6PTKh/IppJLMdAaORmLIIXg53GdX9kWQFJ5MXrJADmmtuG9onV0783aKtSudwfGFtUGof5rKCb6o7kKucbPZ8GD9redC6Wx3ATk6bbAHMakfdEkTbWYcD6nuaxPQZ6x+/PUx60vM6+f4qU5t+/pi+gtd2V1NeAXr0Q7rQTyRx/VOv5twZILKeGNpob4F47TiTvo/JDTlGl7l6i21ToS9hCXE1DWwrIAmRpIbdxBkQgUL2soUSTiGkFTJe78giH5BTPIeY+2QNpWEFTwBRGK1eMSEN2MQBaGbpRVfSEfsVB8EVSktCCVBwGd2UnjxNWmx1o5vHUaXcOEEqIHoPahhv5eM12OmS6sSIO0MnqLItLFF9XxCPf+J3p+9MZyT8zQ7oqGKI1MfcqtHD+NmArYkptRpHDvUT2Z"},{"at":"2026-11-06T15:53:52.763Z","iv":"4kirl6XVTRhp7OVc","ct":"7loLqiLx5GrvuZ0z/ntzfiT+TJDGl6XYmKFlHVt7OkkJaqqZTpicdifP5ai7BaaZE/he70nDesslmmXMGgCa/v1eYeUJ6LjKaKULe3tZ3vAyY8uf+6oPXXUOK2bWBqRu1B+Nsd1uIqvC9HMlnmashcULn7z/FjLs0GF744I+Rvk89L+POTRunKnX9L1Cv2AZPkTT7Wro+vFTzASSoROrg53NRBjvUY9zgnOQEDARMb8gcthYdtW8NxOdSTnc2cNopAAFc5cC8LcDdCCiK6D2ZDYBtL4SYLzvlBky+pVbxajIOjYu+xP4diVt+YQVMhPNIpmjYs/X+tnuxY0RTJuh/85nOgKOXrVPavCd4pbahf1FXlByV4Tk8G7f93KEV6HdSEFYw994EnexSaW+cMR03GVrpqFtGOiIpJZJqFiuvWGinGANPdXu3/aKmwZzHQbe8Qv6EXKkz4I2k+EMaJGIvmOhCBX1tGM/YElqc1RswSFviErsJnLh/jJC8wciR4YSD6Z9B4GA9eBd2XTfwQqhI1XZbyZ2ps1S9re3r135WzjWp3QYEd0VT6jNXiO2LT5gZTA7j3DahBFUPUjHswp+UFyVLUkGUlvnc5PQcgrbBFq5SBLV2Z7/YjDOmy/JQWOCSHLQ2W79oEuyh6wUUxRgBco0PWz3IiSK9tUAA53rCpQbplg5AJAbggV78D/Ca11Mm0VPIZS7UlNaOCjfRxozgMpz5lHlu4G5/vaR95HK2GLOnB2y3maDzgvfGFx8h4dXYRrl9+Wtg4Kji0lWe6iEHyBNUWiRh2qq757iVOG8MihluCIAaQSa2GuZa/HuJcjq6lYtg7W5kHyYzit7X6uNHEigwQp4sj0b"}]};/*PUB-END*/
 let UNLOCKED=[];
 const allH=()=>UNLOCKED.concat(H).sort((a,b)=>a.at<b.at?1:-1);
 const b64d=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
