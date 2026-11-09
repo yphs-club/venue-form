@@ -97,6 +97,14 @@ table.ap{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;l
 .li.done{opacity:.6}
 .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:#dcfce7;color:#166534;margin-left:6px}
 .li .btn{margin-top:6px;min-height:34px;padding:5px 10px;font-size:14px}
+.sheet.st{padding:12mm 13mm;display:block}
+.st h2{text-align:center;font-size:21px;margin:0 0 5mm;letter-spacing:.5px}
+table.sx{border-collapse:collapse;width:100%;table-layout:fixed;font-size:14px;line-height:1.5}
+.sx td,.sx th{border:1px solid #000;padding:2mm 2.5mm;vertical-align:middle;word-break:break-all}
+.sx th{font-weight:700;text-align:center}
+.sx .big{height:46mm;vertical-align:top;white-space:pre-wrap}
+.sx .cons{height:62mm;vertical-align:top;padding:3mm 4mm}
+.sx .stamp{display:inline-block;width:30mm;height:22mm;border:1px dashed #999;color:#999;font-size:12px;text-align:center;line-height:22mm;vertical-align:top}
 </style>
 </head>
 <body>
@@ -115,7 +123,9 @@ table.ap{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;l
     <div id="list"><p class="hint">請先輸入密碼並載入。</p></div>
   </section>
   <section class="card" id="editCard" style="display:none">
-    <h2>✏️ 可調整的欄位</h2>
+    <h2>✏️ 同意書格式與欄位</h2>
+    <div class="chips"><label class="chip"><input type="radio" name="fmt" value="student" checked><span>每位學生一頁(校外活動)</span></label><label class="chip"><input type="radio" name="fmt" value="practice"><span>一頁兩聯(平時練習)</span></label></div>
+    <p class="hint" id="fmtHint"></p>
     <label>老師教練<input type="text" id="e_tname"></label>
     <label>老師連絡電話<input type="tel" id="e_tphone"></label>
     <label>活動地點<input type="text" id="e_place"></label>
@@ -184,10 +194,45 @@ function cform(copy){
 }
 const CUT="✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂";
 
+let FMT="student";
+function members(){return (S.members||"").split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{const m=l.match(/^(\S+)\s+(.+)$/);return m?{id:m[1],name:m[2]}:{id:"",name:l}})}
+function parseId(id){ // 208-12 → 2年8班12號
+  let m=String(id).match(/^(\d)(\d{2})\D+(\d{1,2})$/);if(m)return {g:+m[1],c:+m[2],n:+m[3]};
+  m=String(id).match(/^(\d)\D+(\d{1,2})\D+(\d{1,2})$/);if(m)return {g:+m[1],c:+m[2],n:+m[3]};
+  return null}
+function schedule(){
+  if(!S.sd)return "";
+  const a=roc(S.sd),b=S.ed?roc(S.ed):a,tm=(S.st||"")+"～"+(S.et||"");
+  if(!S.ed||S.ed===S.sd)return `${a.y}年${a.m}月${a.d}日（${a.w}）${tm}（無過夜）`;
+  const [y,m,d]=ymd(S.sd),e=ymd(S.ed),days=Math.round((new Date(e[0],e[1]-1,e[2])-new Date(y,m-1,d))/864e5),out=[];
+  for(let i=0;i<=Math.min(days,10);i++){const dt=new Date(y,m-1,d+i),r=roc(dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0"));out.push((i===0?r.y+"年":"")+r.m+"月"+r.d+"日（"+r.w+"）"+tm)}
+  return out.join("、")+"（無過夜）"}
+function studentSheet(m){
+  const pi=m?parseId(m.id):null;
+  const who=m?`<u>&nbsp;${esc(m.name)}&nbsp;</u>　<u>&nbsp;${pi?pi.g:"　"}&nbsp;</u>年<u>&nbsp;${pi?pi.c:"　"}&nbsp;</u>班<u>&nbsp;${pi?pi.n:(m.id&&!pi?esc(m.id):"　")}&nbsp;</u>號`:`＿＿＿＿＿　＿年＿班＿號`;
+  const lead=S.lname?`${esc(S.lname)}${S.lrole?"（"+esc(S.lrole)+"）":""}`:"";
+  const sc=S.scope==="校外"?"□校內 ■校外活動":"■校內 □校外活動";
+  return `<div class="sheet st"><h2>新北市立永平高中學生社團「${sc}」家長同意書</h2>
+  <table class="sx"><colgroup><col style="width:17%"><col style="width:33%"><col style="width:17%"><col style="width:33%"></colgroup>
+   <tr><th>主辦社團</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td></tr>
+   <tr><th>活動地點</th><td style="text-align:center">${esc(S.place)}</td><th>參加人數</th><td>本校 <u>&nbsp;${esc(S.inn)||"　"}&nbsp;</u> 人，校外 <u>&nbsp;${esc(S.out)||"　"}&nbsp;</u> 人</td></tr>
+   <tr><th>活動內容<br>及規劃</th><td colspan="3" class="big">${esc(S.desc)}</td></tr>
+   <tr><th>活動時程</th><td colspan="3">${esc(schedule())}</td></tr>
+   <tr><th>本校<br>負責人姓名</th><td>${esc(S.scls)}　姓名:${esc(S.sname)}</td><th>連絡電話</th><td>${esc(S.sphone)}</td></tr>
+   <tr><th style="height:20mm">帶隊師長</th><td style="vertical-align:top">${lead}<div style="font-size:12px;margin-top:5mm;text-align:center">（僅過夜活動必須有師長陪同）</div></td><th>連絡電話</th><td>${esc(S.lname?S.lphone:"")}</td></tr>
+   <tr><td colspan="4" class="cons"><div style="text-indent:2em;font-size:15px;line-height:1.9">茲同意子弟 ${who} 參加社團舉辦之活動，並確實遵守各項安全規定與申請之時間，如有違反規定者，願接受校方懲處。</div>
+     <div style="margin-top:3mm;display:flex;justify-content:space-between;align-items:flex-start"><span class="stamp">學務處核章</span><div style="width:60%;font-size:15px;line-height:2.2">家長簽章：＿＿＿＿＿＿＿＿＿<br>家長手機：＿＿＿＿＿＿＿＿＿<br>日　期：　　　年　　月　　日</div></div></td></tr>
+   <tr><th style="height:22mm">家長<br>意見</th><td colspan="3" style="vertical-align:bottom;font-size:12.5px">如家長對本次活動有任何疑問，歡迎洽詢學務處社團組（電話：22319670 分機 225)</td></tr>
+   <tr><th>附註<br>說明</th><td colspan="3" style="font-size:13px;line-height:1.55;vertical-align:top">貴家長您好：<br>　　貴子弟將於上述時間參加社團活動，依據本校規定，凡社團舉辦相關活動，必須檢具家長同意書。為求慎重，茲奉上貴子弟之家長同意書，並請核閱後於下列家長同意欄中簽名蓋章及連絡電話，並請此表交由社團負責人交回學務處，以為核准貴子弟參加該項活動之依據，若未擲回則視同貴家長不同意處理。</td></tr>
+  </table></div>`}
 function render(){
   if(!S){$("preview").innerHTML="";return}
-  $("preview").innerHTML=`<div class="sheet-wrap"><div class="sheet">${cform(1)}<div class="cut">${CUT}</div>${cform(2)}</div></div>`;
-  $("pvhead").textContent="預覽 · "+(S.unit||"")+"「"+(S.aname||"")+"」家長同意書(A4 共 1 頁)";
+  let html,pages;
+  if(FMT==="student"){const ml=members();const list=ml.length?ml:[null];pages=list.length;html=list.map(m=>`<div class="sheet-wrap">${studentSheet(m)}</div>`).join("")}
+  else{pages=1;html=`<div class="sheet-wrap"><div class="sheet">${cform(1)}<div class="cut">${CUT}</div>${cform(2)}</div></div>`}
+  $("preview").innerHTML=html;
+  $("pvhead").textContent="預覽 · "+(S.unit||"")+"「"+(S.aname||"")+"」家長同意書(A4 共 "+pages+" 頁)";
+  $("fmtHint").textContent=FMT==="student"?(members().length?`依名單產生 ${members().length} 份,每位學生姓名、班級座號已填好。`:"申請資料沒有名單,會產生 1 份空白姓名的同意書。"):"一頁上下兩聯,家長自己填姓名。";
   fit();
 }
 function fit(){const w=$("preview").clientWidth;if(!w)return;document.documentElement.style.setProperty("--s",Math.min(1,Math.max(.3,(w-4)/793.7)).toFixed(4))}
@@ -216,11 +261,13 @@ function pick(id){
   S=Object.assign({},CUR.data);cnt="";
   $("editCard").style.display="block";
   $("e_tname").value=S.lname||S.tname||"";$("e_tphone").value=S.lname?S.lphone:S.tphone||"";$("e_place").value=S.place||"";$("e_cnt").value=totalCount();
+  FMT=S.scope==="校外"?"student":"practice";document.querySelectorAll("input[name=fmt]").forEach(r=>r.checked=r.value===FMT);
   $("pdf").disabled=false;render();window.scrollTo({top:0,behavior:"smooth"});
 }
 function edit(){if(!S)return;
   if(S.lname){S.lname=$("e_tname").value;S.lphone=$("e_tphone").value}else{S.tname=$("e_tname").value;S.tphone=$("e_tphone").value}
   S.place=$("e_place").value;cnt=$("e_cnt").value;render()}
+document.querySelectorAll("input[name=fmt]").forEach(r=>r.addEventListener("change",()=>{FMT=r.value;render()}));
 ["e_tname","e_tphone","e_place","e_cnt"].forEach(i=>$(i).addEventListener("input",edit));
 
 function loadScript(src){return new Promise((ok,no)=>{if(document.querySelector('script[src="'+src+'"]'))return ok();const e=document.createElement("script");e.src=src;e.onload=ok;e.onerror=()=>no(new Error("load "+src));document.head.appendChild(e)})}
@@ -231,7 +278,10 @@ async function makePdf(){
   const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
   document.documentElement.style.setProperty("--s","1");
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-  try{const c=await html2canvas(document.querySelector(".sheet"),{scale:2,backgroundColor:"#ffffff",useCORS:true,scrollX:0,scrollY:-window.scrollY});pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",0,0,210,297)}finally{fit()}
+  try{const sh=document.querySelectorAll(".sheet"),many=sh.length>3;
+    for(let i=0;i<sh.length;i++){$("syncOut").textContent="⏳ 產生第 "+(i+1)+"/"+sh.length+" 頁…";
+      const c=await html2canvas(sh[i],{scale:many?1.5:2,backgroundColor:"#ffffff",useCORS:true,scrollX:0,scrollY:-window.scrollY});
+      if(i)pdf.addPage();pdf.addImage(c.toDataURL("image/jpeg",many?0.78:0.88),"JPEG",0,0,210,297)}}finally{fit()}
   return pdf.output("blob");
 }
 $("pdf").onclick=async()=>{
