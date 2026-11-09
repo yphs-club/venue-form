@@ -262,15 +262,16 @@ function form(copy){
   const stu=`${esc(S.sname)}　職稱：${esc(S.stitle)}　連絡電話：${esc(S.sphone)}　（${esc(S.scls)||"　　年　　班　　號"}）`;
   const head=copy===1?`新北市立永平高級中學 學生課後活動 家長同意書<span class="copy">社團活動組留存聯</span>`:`新北市立永平高級中學　家長同意書<span class="copy">家長留存聯</span>`;
   const tail=copy===1?`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm 4mm 3mm;vertical-align:top">
-      <div><b>□同意　□不同意　</b>❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
+      <div><b>□同意　□不同意</b></div>
+      <div style="margin-top:2mm">❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
       <div style="margin-top:6mm"><b>家長意見：</b>${U(34)}</div>
       <div style="margin-top:6mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
       <div class="notes">(1)未繳交家長同意書<b>而擅自留校練習／活動者</b>，依校規懲處（記警告）。(2)經抽查如非家長親自簽名，依校規懲處（記警告）。(3)社團活動練習時間如逾<b>18:00</b>，須有指導老師或教練<b>全程隨同</b>，否則校方<b>不予核准</b>。經抽查違規擅留者，<b>暫停該社團場地借用及練習權限一個月</b>。(4)若學生自主活動無指導老師隨行，經家長同意後，則活動由主辦學生與參與同學自行負責。</div>
     </td></tr></table>`
     :`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm;vertical-align:middle">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
   return `<div class="form c${copy}"><h2>${head}</h2>
-  <table class="ct"><colgroup><col style="width:15%"><col style="width:24%"><col style="width:13%"><col style="width:22%"><col style="width:12%"><col style="width:14%"></colgroup>
-   <tr><th>姓　名</th><td>（　　年　　班　　號）</td><th>連絡電話</th><td colspan="3"></td></tr>
+  <table class="ct"><colgroup><col style="width:15%"><col style="width:26%"><col style="width:13%"><col style="width:14%"><col style="width:14%"><col style="width:18%"></colgroup>
+   <tr><th>姓　名</th><td colspan="2" style="text-align:right">（　　年　　班　　號）</td><th>連絡電話</th><td colspan="2"></td></tr>
    <tr><th>主辦單位</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td><th>活動地點</th><td>${esc(S.place)}</td></tr>
    <tr><th>老師教練</th><td colspan="5">${esc(S.tname)}　連絡電話：${esc(S.tphone)}　是否隨行：${follow}</td></tr>
    <tr><th>主辦學生</th><td colspan="5">${stu}</td></tr>
