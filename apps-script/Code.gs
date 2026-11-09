@@ -1,11 +1,13 @@
 /**
  * 社團申請表單 PDF 接收端(Google Apps Script)
- * 網頁產生 PDF 時會自動把檔案送到這裡,依「表單種類 / 社團」分資料夾存進「你的」Google 雲端:
+ * 網頁產生 PDF 時會自動把檔案送到這裡,依「社團 / 表單種類」分資料夾存進「你的」Google 雲端:
  *
  *   社團申請表單 /
- *     場地借用單 / 儀隊 / 20261110-010425_場地借用單_儀隊_2026-12-04.pdf
- *     家長同意書 / 儀隊 / 20261110-020328_家長同意書_儀隊_115年12月.pdf
- *     其他 / ...(檔名不是上面兩種時)
+ *     儀隊 /
+ *       場地借用單 / 20261110-010425_場地借用單_儀隊_2026-12-04.pdf
+ *       家長同意書 / 20261110-020328_家長同意書_儀隊_115年12月.pdf
+ *     未填社團 / 場地借用單 / ...(網頁沒填社團名稱時)
+ *     其他 / ...(檔名不是借用單或同意書時)
  *
  * 設定:
  * 1) 把 TOKEN 改成你自己的通關碼(要和網頁 index.html、consent.html 裡的 UPLOAD_TOKEN 相同)。
@@ -37,10 +39,17 @@ function doPost(e) {
 
     lock.waitLock(20000);                       // 避免同時上傳時重複建立資料夾
     let folder = child_(DriveApp.getRootFolder(), ROOT_NAME);
-    folder = child_(folder, kind.type);
-    if (kind.club) folder = child_(folder, kind.club);
+    let path;
+    if (kind.type === '其他') {                  // 不是借用單/同意書:放在「其他」
+      folder = child_(folder, '其他');
+      path = '其他';
+    } else {                                    // 社團 → 表單種類
+      const club = kind.club || '未填社團';
+      folder = child_(child_(folder, club), kind.type);
+      path = club + '/' + kind.type;
+    }
     const file = folder.createFile(Utilities.newBlob(bytes, 'application/pdf', name));
-    return out_({ ok: true, name: name, folder: kind.type + (kind.club ? '/' + kind.club : ''), url: file.getUrl() });
+    return out_({ ok: true, name: name, folder: path, url: file.getUrl() });
   } catch (err) {
     return out_({ ok: false, error: String(err) });
   } finally {
