@@ -5,25 +5,62 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>課後活動場地借用申請表產生器</title>
 <style>
+:root{--accent:#1a5fb4;--accent-d:#144a8d;--bg:#eef1f6;--line:#cfd6e2;--text:#1f2937;--muted:#6b7280;--warn:#b45309;--warn-bg:#fef3c7;--ok:#166534;--ok-bg:#dcfce7;--s:1}
 *{box-sizing:border-box}
-body{margin:0;font-family:"DFKai-SB","BiauKai","標楷體","Noto Serif TC","PMingLiU",serif;background:#e8e8e8;color:#000}
-.app{display:flex;gap:16px;padding:16px;align-items:flex-start}
-.panel{width:380px;flex:none;background:#fff;padding:14px;border-radius:8px;font-family:system-ui,"Noto Sans TC",sans-serif;font-size:14px;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
-.panel h1{font-size:17px;margin:0 0 10px}
-.panel fieldset{border:1px solid #ccc;border-radius:6px;margin:0 0 10px;padding:8px 10px}
-.panel legend{font-weight:700;padding:0 4px}
-.panel label{display:block;margin:5px 0}
-.panel input[type=text],.panel input[type=tel],.panel input[type=date],.panel input[type=time],.panel input[type=number],.panel textarea{width:100%;padding:4px 6px;font:inherit;border:1px solid #bbb;border-radius:4px}
-.row{display:flex;gap:6px;align-items:center}.row>*{flex:1}
-.chk{display:inline-block;margin-right:10px}
-.slot{display:grid;grid-template-columns:16px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) 24px;gap:4px;align-items:center;margin:4px 0}
-.slot button{padding:2px}.slot input{padding:2px 3px!important;font-size:12px!important}
+body{margin:0;font-family:"DFKai-SB","BiauKai","標楷體","Noto Serif TC","PMingLiU",serif;background:var(--bg);color:#000}
+.top{background:linear-gradient(135deg,#1a5fb4,#2b7bd6);color:#fff;padding:14px 20px;font-family:system-ui,"Noto Sans TC",sans-serif}
+.top h1{margin:0;font-size:20px;letter-spacing:.5px}
+.top p{margin:2px 0 0;font-size:13px;opacity:.9}
+.app{display:flex;gap:18px;padding:18px;align-items:flex-start;max-width:1400px;margin:0 auto}
+.panel{width:420px;flex:none;font-family:system-ui,"Noto Sans TC",sans-serif;font-size:15px;color:var(--text);position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding-right:2px}
+.card{background:#fff;border:1px solid #e3e8f0;border-radius:12px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 1px 2px #0000000a}
+.card>h2,.card>summary{font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;font-weight:700;cursor:default}
+details.card>summary{cursor:pointer;margin:0;list-style:none}
+details.card[open]>summary{margin-bottom:10px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"▾";margin-left:auto;color:var(--muted)}
+details.card:not([open])>summary::after{content:"▸"}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex:none}
+.panel label{display:block;margin:8px 0 0;font-size:13px;color:var(--muted)}
+.panel label.chip{margin:0}
+.panel input[type=text],.panel input[type=tel],.panel input[type=date],.panel input[type=time],.panel input[type=number],.panel textarea,.panel select{width:100%;min-height:40px;padding:8px 10px;margin-top:3px;font:inherit;font-size:15px;color:var(--text);background:#fff;border:1px solid var(--line);border-radius:8px}
+.panel textarea{min-height:60px;resize:vertical}
+.panel input:focus,.panel textarea:focus,.panel select:focus,button:focus-visible{outline:2px solid #7fb0f0;outline-offset:1px;border-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{position:relative;display:inline-block}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14px;color:var(--text)}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip input:focus-visible+span{outline:2px solid #7fb0f0;outline-offset:1px}
+.slot{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1fr) 40px;gap:6px;align-items:center;margin:8px 0;padding-bottom:10px;border-bottom:1px dashed #dde3ee}
+.slot>span{grid-row:1/3;grid-column:1;font-size:13px;color:var(--muted);text-align:center}
+.slot>input{margin:0!important;min-height:40px!important;font-size:15px!important}
+.slot>input[data-k=date]{grid-column:2/4;grid-row:1}
+.slot>input[data-k=start]{grid-column:2;grid-row:2}
+.slot>input[data-k=end]{grid-column:3;grid-row:2}
+.slot>button{grid-column:4;grid-row:1/3;height:100%;min-height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;color:#b91c1c;font-size:16px}
 button{font:inherit;cursor:pointer}
-.btn{padding:6px 12px;border:1px solid #888;border-radius:4px;background:#f4f4f4}
-.btn.primary{background:#1a5fb4;color:#fff;border-color:#1a5fb4}
-.hint{color:#666;font-size:12px}
-.preview{flex:1;overflow:auto}
-.sheet{width:210mm;height:297mm;background:#fff;margin:0 auto 16px;padding:7mm 9mm;box-shadow:0 1px 6px #0004;position:relative;overflow:hidden}
+.btn{padding:9px 14px;min-height:40px;border:1px solid #9aa6b8;border-radius:8px;background:#f7f8fb;color:var(--text);font-size:15px}
+.btn:hover{background:#eef2f8}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.btn.primary:hover{background:var(--accent-d)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.block{width:100%}
+.hint{color:var(--muted);font-size:12.5px;line-height:1.5;margin:6px 0 0}
+details.sub{margin-top:8px;border:1px dashed var(--line);border-radius:8px;padding:8px 10px}
+details.sub>summary{cursor:pointer;font-size:14px;color:var(--accent);font-weight:600}
+.qgrow{display:grid;grid-template-columns:64px 1fr 1fr;gap:6px;align-items:center;margin:6px 0}
+.qgrow input{margin:0!important}
+.warn{list-style:none;margin:0;padding:0;font-size:13.5px}
+.warn li{margin:0 0 6px;padding:7px 10px;border-radius:8px;background:var(--warn-bg);color:var(--warn)}
+.warn li.ok{background:var(--ok-bg);color:var(--ok)}
+.actions{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 0 4px;background:linear-gradient(to top,var(--bg) 70%,#eef1f600)}
+.actions .primary{flex:2}.actions .btn:not(.primary){flex:1}
+.pvhead{font-family:system-ui,"Noto Sans TC",sans-serif;font-size:13px;color:var(--muted);margin:0 0 8px;text-align:center}
+.preview{flex:1;min-width:0}
+.sheet-wrap{width:calc(210mm*var(--s));height:calc(297mm*var(--s));margin:0 auto 16px;position:relative;box-shadow:0 2px 10px #00000026;background:#fff}
+.sheet{width:210mm;height:297mm;background:#fff;padding:7mm 9mm;position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:top left;overflow:hidden}
 .sheet.two{display:flex;flex-direction:column;justify-content:space-between}
 .cut{text-align:center;font-size:10px;color:#444;letter-spacing:1px;white-space:nowrap;overflow:hidden;margin:1mm 0}
 .form{font-size:12px;line-height:1.35}
@@ -48,61 +85,92 @@ th{font-weight:400;text-align:center;white-space:nowrap;width:22mm}
 @media print{
   @page{size:A4;margin:0}
   body{background:#fff}
-  .panel,.noprint{display:none!important}
+  .top,.panel,.noprint,.pvhead{display:none!important}
   .app{display:block;padding:0}
-  .preview{overflow:visible}
-  .sheet{margin:0;box-shadow:none;page-break-after:always;break-after:page}
-  .sheet:last-child{page-break-after:auto;break-after:auto}
+  .sheet-wrap{width:auto;height:auto;margin:0;box-shadow:none;page-break-after:always;break-after:page}
+  .sheet{position:relative;transform:none}
+  .sheet-wrap:last-child{page-break-after:auto;break-after:auto}
 }
-@media (max-width:900px){.app{flex-direction:column}.panel{width:100%;position:static;max-height:none}.preview{width:100%}.sheet{transform-origin:top left}}
+@media (max-width:900px){
+  .app{flex-direction:column;padding:10px 10px 90px}
+  .panel{width:100%;position:static;max-height:none;overflow:visible}
+  .preview{width:100%}
+  .actions{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 8px #0000001a}
+  .top{padding:12px 14px}
+}
 </style>
 </head>
 <body>
+<header class="top noprint"><h1>場地借用申請表</h1><p>新北市立永平高中 · 課後活動場地借用</p></header>
 <div class="app">
 <div class="panel noprint">
-  <h1>場地借用申請表產生器</h1>
-  <fieldset><legend>過去的申請</legend>
-    <select id="hist" style="width:100%;padding:4px"></select>
-    <div class="row" style="margin-top:6px"><button class="btn" id="histLoad">載入並修改</button><button class="btn" id="histSave">儲存這次申請</button><button class="btn" id="histDel">刪除</button></div>
-    <div id="unlockBox" style="display:none;margin:6px 0"><label>輸入申請人電話末三碼,查詢公開的過去紀錄<input type="text" id="code" inputmode="numeric" maxlength="3" placeholder="例如 123"></label><button class="btn" id="unlockBtn" style="margin-top:4px">查詢</button></div>
-    <div class="hint" id="histNote">查到的公開紀錄標示【公開】,不能在這裡刪除;你自己儲存的只存在這台瀏覽器。</div>
-    <div class="hint">載入後會保留基本資料、場地、名單,申請日期改為今天;時段日期若已過期會清空,未來的會保留。下載 PDF 時會自動存一筆。</div>
-  </fieldset>
-  <fieldset><legend>基本資料</legend>
+
+  <details class="card" id="histCard" open>
+    <summary>📂 過去的申請</summary>
+    <select id="hist"></select>
+    <div class="row" style="margin-top:8px"><button class="btn" id="histLoad">載入並修改</button><button class="btn" id="histSave">儲存這次</button><button class="btn" id="histDel">刪除</button></div>
+    <div id="unlockBox" style="display:none;margin:8px 0 0"><label>輸入申請人電話末三碼,查詢公開的過去紀錄<input type="text" id="code" inputmode="numeric" maxlength="3" placeholder="例如 123"></label><button class="btn" id="unlockBtn" style="margin-top:6px">查詢</button></div>
+    <p class="hint" id="histNote">查到的公開紀錄標示【公開】,不能在這裡刪除;你自己儲存的只存在這台瀏覽器。</p>
+    <p class="hint">載入後會保留基本資料、場地、名單,申請日期改為今天;時段日期若已過期會清空,未來的會保留。下載 PDF 時會自動存一筆。</p>
+  </details>
+
+  <section class="card">
+    <h2><span class="n">1</span>基本資料</h2>
     <label>社團名稱<input type="text" id="club"></label>
     <div class="row"><label>社長班級<input type="text" id="pcls" placeholder="2年8班"></label><label>社長姓名<input type="text" id="pname"></label></div>
     <div class="row"><label>申請人班級座號<input type="text" id="acls" placeholder="2年8班1號"></label><label>申請人姓名<input type="text" id="aname"></label></div>
-    <label>申請人手機<input type="tel" id="aphone"></label>
+    <label>申請人手機<input type="tel" id="aphone" inputmode="tel"></label>
     <label>申請日期<input type="date" id="adate"></label>
-  </fieldset>
-  <fieldset><legend>借用場地</legend>
-    <div id="venues"></div>
+    <label class="chip" style="margin-top:10px"><input type="checkbox" id="sameAsApplicant" checked><span>場地衛生負責人同申請人</span></label>
+    <div id="sanBox" style="display:none">
+      <div class="row"><label>衛生負責人班級座號<input type="text" id="scls"></label><label>姓名<input type="text" id="sname"></label></div>
+      <label>衛生負責人手機<input type="tel" id="sphone" inputmode="tel"></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">2</span>借用場地</h2>
+    <div id="venues" class="chips"></div>
     <label>其他場地<input type="text" id="vother"></label>
     <label>借用班級教室(例:2年8班)<input type="text" id="vclass"></label>
-    <label>教室班導簽名處<span class="hint">(留白供手簽)</span></label>
-  </fieldset>
-  <fieldset><legend>場地衛生負責人</legend>
-    <label><input type="checkbox" id="sameAsApplicant" checked> 同申請人</label>
-    <div id="sanBox" style="display:none">
-      <div class="row"><label>班級座號<input type="text" id="scls"></label><label>姓名<input type="text" id="sname"></label></div>
-      <label>手機<input type="tel" id="sphone"></label>
-    </div>
-  </fieldset>
-  <fieldset><legend>借用時間 <span id="cnt" class="hint"></span></legend>
+    <p class="hint">教室班導簽名處留白,列印後手簽。</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">3</span>借用時間 <span id="cnt" class="hint" style="margin:0 0 0 auto"></span></h2>
     <div id="slots"></div>
-    <button class="btn" id="addSlot">＋ 新增時段</button>
-    <div class="hint" style="margin-top:6px">≤3 筆:列印第 1 頁(A4 上下兩聯)。<br>4～12 筆:列印第 2、3 頁(社團活動組聯、總務處聯各一頁)。</div>
-  </fieldset>
-  <fieldset><legend>借用事由 / 名單</legend>
+    <button class="btn block" id="addSlot" style="margin-top:6px">＋ 新增時段</button>
+    <details class="sub">
+      <summary>⚡ 快速產生每週時段</summary>
+      <label>從哪一天開始<input type="date" id="qgStart"></label>
+      <p class="hint" style="margin-top:8px">勾選每週要借的星期,並設定各自的時間:</p>
+      <div id="qgDays"></div>
+      <label>共幾筆(最多 12)<input type="number" id="qgCount" min="1" max="12" value="8"></label>
+      <button class="btn block" id="qgApply" style="margin-top:8px">套用(會取代目前的時段)</button>
+    </details>
+    <p class="hint">3 筆以內:A4 一頁(上下兩聯)。4~12 筆:A4 兩頁(社團活動組聯、總務處聯各一頁)。</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">4</span>借用事由與名單</h2>
     <label>借用事由<textarea id="reason" rows="2"></textarea></label>
-    <label>總人數(留空=依名單行數計算)<input type="number" min="0" id="total"></label>
+    <label>總人數(留空=依名單行數計算)<input type="number" min="0" id="total" inputmode="numeric"></label>
     <label>使用場地人員名單(一行一人,或用頓號/逗號分隔)<textarea id="members" rows="4"></textarea></label>
-  </fieldset>
-  <div class="row"><button class="btn primary" id="pdf">下載 PDF</button><button class="btn" id="reset">清空表單</button></div>
-  <div style="margin-top:6px"><button class="btn" id="gdrive" style="display:none;width:100%">存到我的 Google 雲端(PDF)</button><div id="gdriveOut" class="hint"></div></div>
+  </section>
+
+  <section class="card">
+    <h2>✅ 送出前檢查</h2>
+    <ul class="warn" id="warn"></ul>
+  </section>
+
+  <div class="actions"><button class="btn primary" id="pdf">下載 PDF</button><button class="btn" id="reset">清空表單</button></div>
+  <div style="margin-top:6px"><button class="btn block" id="gdrive" style="display:none">存到我的 Google 雲端(PDF)</button><div id="gdriveOut" class="hint"></div></div>
   <p class="hint">資料會存在這台瀏覽器裡,下次開啟自動帶入。※借用前 3 天提出申請。</p>
 </div>
-<div class="preview" id="preview"></div>
+<div class="preview">
+  <p class="pvhead noprint" id="pvhead"></p>
+  <div id="preview"></div>
+</div>
 </div>
 
 <script>
@@ -119,7 +187,7 @@ const defaults=()=>({club:"",pcls:"",pname:"",acls:"",aname:"",aphone:"",adate:t
 let S=defaults();try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
 
 // ---------- panel ----------
-$("venues").innerHTML=VENUES.map((v,i)=>`<label class="chk"><input type="checkbox" data-v="${v}"> ${v}</label>`).join("");
+$("venues").innerHTML=VENUES.map(v=>`<label class="chip"><input type="checkbox" data-v="${v}"><span>${v}</span></label>`).join("");
 const textIds=["club","pcls","pname","acls","aname","aphone","adate","vother","vclass","scls","sname","sphone","reason","members","total"];
 function load(){
   textIds.forEach(id=>$(id).value=S[id]||"");
@@ -129,12 +197,12 @@ function load(){
 }
 function renderSlots(){
   $("slots").innerHTML=S.slots.map((s,i)=>`<div class="slot"><span>${i+1}</span>
-    <input type="date" data-i="${i}" data-k="date" value="${s.date}">
-    <input type="time" data-i="${i}" data-k="start" value="${s.start}">
-    <input type="time" data-i="${i}" data-k="end" value="${s.end}">
-    <button data-del="${i}" title="刪除">✕</button></div>`).join("");
+    <input type="date" data-i="${i}" data-k="date" value="${s.date}" aria-label="第${i+1}筆日期">
+    <input type="time" data-i="${i}" data-k="start" value="${s.start}" aria-label="第${i+1}筆開始時間">
+    <input type="time" data-i="${i}" data-k="end" value="${s.end}" aria-label="第${i+1}筆結束時間">
+    <button data-del="${i}" title="刪除這筆" aria-label="刪除第${i+1}筆">✕</button></div>`).join("");
   $("addSlot").disabled=S.slots.length>=MAX;
-  $("cnt").textContent=`(${S.slots.length}/${MAX},${S.slots.length<=3?"第1頁":"第2、3頁"})`;
+  $("cnt").textContent=`${S.slots.length}/${MAX} 筆 · ${S.slots.length<=3?"第1頁":"第2、3頁"}`;
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}render()}
 textIds.forEach(id=>$(id).addEventListener("input",()=>{S[id]=$(id).value;save()}));
@@ -142,10 +210,50 @@ document.querySelectorAll("[data-v]").forEach(c=>c.addEventListener("change",()=
   S.venues=[...document.querySelectorAll("[data-v]")].filter(x=>x.checked).map(x=>x.dataset.v);save()}));
 $("sameAsApplicant").addEventListener("change",e=>{S.same=e.target.checked;$("sanBox").style.display=S.same?"none":"block";save()});
 $("slots").addEventListener("input",e=>{const t=e.target;if(t.dataset.k){S.slots[+t.dataset.i][t.dataset.k]=t.value;save()}});
-$("slots").addEventListener("click",e=>{const d=e.target.dataset.del;if(d!=null){S.slots.splice(+d,1);if(!S.slots.length)S.slots.push({date:"",start:"16:00",end:"18:00"});renderSlots();save()}});
+$("slots").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(b){S.slots.splice(+b.dataset.del,1);if(!S.slots.length)S.slots.push({date:"",start:"16:00",end:"18:00"});renderSlots();save()}});
 $("addSlot").onclick=()=>{if(S.slots.length>=MAX)return;const l=S.slots[S.slots.length-1]||{};S.slots.push({date:"",start:l.start||"16:00",end:l.end||"18:00"});renderSlots();save()};
-function toast(t){let e=$("toast");if(!e){e=document.createElement("div");e.id="toast";e.className="noprint";e.style.cssText="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui,sans-serif;z-index:9;max-width:90vw";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",6000)}
+function toast(t){let e=$("toast");if(!e){e=document.createElement("div");e.id="toast";e.className="noprint";e.style.cssText="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui,sans-serif;z-index:50;max-width:90vw;text-align:center";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",6000)}
 $("reset").onclick=()=>twice("reset","要清空目前表單?",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=defaults();load();render()});
+
+// ---------- quick weekly generator ----------
+const QG_ORDER=[1,2,3,4,5,6,0];
+$("qgDays").innerHTML=QG_ORDER.map(d=>`<div class="qgrow"><label class="chip"><input type="checkbox" data-wd="${d}"><span>週${WD[d]}</span></label><input type="time" data-qs="${d}" value="17:00" aria-label="週${WD[d]}開始"><input type="time" data-qe="${d}" value="19:00" aria-label="週${WD[d]}結束"></div>`).join("");
+$("qgApply").onclick=()=>{
+  const start=$("qgStart").value;
+  const sel=QG_ORDER.filter(d=>document.querySelector(`[data-wd="${d}"]`).checked);
+  if(!start){toast("請先選「從哪一天開始」");return}
+  if(!sel.length){toast("請至少勾選一個星期");return}
+  const want=Math.max(1,Math.min(MAX,+$("qgCount").value||1));
+  const out=[];const d0=start.split("-").map(Number);
+  for(let i=0;i<500&&out.length<want;i++){
+    const dt=new Date(d0[0],d0[1]-1,d0[2]+i),wd=dt.getDay();
+    if(sel.includes(wd)){
+      out.push({date:dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0"),
+        start:document.querySelector(`[data-qs="${wd}"]`).value||"17:00",end:document.querySelector(`[data-qe="${wd}"]`).value||"19:00"});
+    }
+  }
+  const has=S.slots.some(s=>s.date);
+  const apply=()=>{S.slots=out;renderSlots();save();toast("已產生 "+out.length+" 筆時段")};
+  if(has)twice("qg","會取代目前已填的時段",apply);else apply();
+};
+
+// ---------- checks ----------
+function renderWarn(){
+  const w=[];
+  if(!S.club.trim())w.push("尚未填社團名稱");
+  if(!S.aname.trim()||!S.aphone.trim())w.push("申請人姓名或手機尚未填");
+  if(!S.venues.length&&!S.vother.trim()&&!S.vclass.trim())w.push("尚未選借用場地");
+  const nd=S.slots.filter(s=>!s.date).length;
+  if(nd)w.push(`有 ${nd} 筆時段尚未選日期`);
+  if(S.slots.some(s=>s.start&&s.end&&s.end<=s.start))w.push("有時段的結束時間不晚於開始時間");
+  const over=S.slots.filter(s=>s.end&&s.end>"18:00").length;
+  if(over)w.push(`有 ${over} 筆時段超過 18:00,需要督導教師簽名`);
+  const dates=S.slots.map(s=>s.date).filter(Boolean).sort();
+  if(dates.length){const t=new Date();t.setHours(0,0,0,0);const first=new Date(dates[0]+"T00:00:00");
+    const diff=Math.round((first-t)/86400000);
+    if(diff<3)w.push(diff<0?"有時段日期已經過了":"最早的借用日不足 3 天,依規定需借用前 3 天提出申請")}
+  $("warn").innerHTML=w.length?w.map(x=>`<li>⚠ ${esc(x)}</li>`).join(""):'<li class="ok">✔ 資料看起來完整</li>';
+}
 
 // ---------- form rendering ----------
 function parts(dstr){ // ROC y, m, d, weekday
@@ -180,6 +288,7 @@ function form(label,rows,big,extra){
   }else{
     time=slots.map((s,i)=>`<span class="slotline">${slotLine(i,s)}${i==0?`　${over?"☑":"□"}練習超過18:00`:""}${(i==1||(rows==1&&i==0))?"　督導教師簽名：＿＿＿＿＿＿":""}</span>`).join("")+`<span class="slotline" style="font-size:.9em">(如督導教師臨時無法督導僅練到18:00)</span>`;
   }
+  const firstSign=label.indexOf("總務處")>=0?"社團或導師":"社團組長";
   const m=members();
   const mem=m.length?m.map((x,i)=>`(${i+1})${esc(x)}`).join("；"):"(1)　　　；(2)　　　；(3)";
   return `<div class="form ${big?"big":""}">
@@ -194,7 +303,7 @@ function form(label,rows,big,extra){
    <tr><th style="white-space:normal">使用場地人員名單</th><td colspan="3" style="height:${big?"22mm":"10mm"}">${(S.total||m.length)?`總人數:${S.total||m.length}人　`:""}${mem}</td></tr>
   </table>
   <table class="sign" style="margin-top:-1px">
-   <tr><th>社團組長</th><th>衛生組</th><th>生輔組</th><th>體育組</th></tr><tr><td></td><td></td><td></td><td></td></tr>
+   <tr><th>${firstSign}</th><th>衛生組</th><th>生輔組</th><th>體育組</th></tr><tr><td></td><td></td><td></td><td></td></tr>
   </table>
   <table class="sign" style="margin-top:-1px">
    <tr><th>學務主任</th><th>總務處幹事</th><th>總務處事務組長</th><th>總務主任</th></tr><tr><td></td><td></td><td></td><td></td></tr>
@@ -205,14 +314,25 @@ const N1="※借用前3天提出申請表　※申請人要負責場地清潔、
 const N2="提醒:※請同學務必遵守時間與警衛大哥指導　(總務處留存聯)";
 const CUT="✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂";
 function render(){
-  const n=S.slots.length;let html;
+  const n=S.slots.length;let html,pages;
   if(n<=3){
-    html=`<div class="sheet two">${form("社團活動組留存聯",n,false,N1)}<div class="cut">${CUT}</div>${form("總務處留存聯",n,false,N2)}</div>`;
+    pages=1;
+    html=`<div class="sheet-wrap"><div class="sheet two">${form("社團活動組留存聯",n,false,N1)}<div class="cut">${CUT}</div>${form("總務處留存聯",n,false,N2)}</div></div>`;
   }else{
-    html=`<div class="sheet">${form("社團活動組留存聯",n,true,N1)}</div><div class="sheet">${form("總務處留存聯",n,true,N2)}</div>`;
+    pages=2;
+    html=`<div class="sheet-wrap"><div class="sheet">${form("社團活動組留存聯",n,true,N1)}</div></div><div class="sheet-wrap"><div class="sheet">${form("總務處留存聯",n,true,N2)}</div></div>`;
   }
   $("preview").innerHTML=html;
+  $("pvhead").textContent=`預覽 · A4 共 ${pages} 頁(實際列印為原尺寸)`;
+  fit();renderWarn();
 }
+function fit(){
+  const w=$("preview").clientWidth;
+  if(!w)return;
+  const s=Math.min(1,Math.max(.3,(w-4)/793.7));
+  document.documentElement.style.setProperty("--s",s.toFixed(4));
+}
+window.addEventListener("resize",fit);
 
 // ---------- history ----------
 const HKEY=KEY+".hist";
@@ -259,7 +379,7 @@ $("histSave").onclick=()=>saveHistory(false);
 $("histLoad").onclick=()=>{const h=allH()[+$("hist").value];if(!h)return;
   S=Object.assign(defaults(),JSON.parse(JSON.stringify(h.data)));
   S.adate=today();S.slots=S.slots.map(x=>({date:(x.date&&x.date>=today())?x.date:"",start:x.start,end:x.end}));
-  load();save()};
+  load();save();toast("已載入,請確認日期與時間")};
 let armed={};
 function twice(key,msg,fn){if(armed[key]){clearTimeout(armed[key]);armed[key]=0;fn();return}toast(msg+"(再按一次確認)");armed[key]=setTimeout(()=>armed[key]=0,5000)}
 $("histDel").onclick=()=>{const r=allH()[+$("hist").value];if(!r)return;
@@ -299,20 +419,25 @@ async function makePdf(){
   await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
   await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
   const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
-  const sheets=[...document.querySelectorAll(".sheet")],imgs=[];
-  for(let i=0;i<sheets.length;i++){
-    const c=await html2canvas(sheets[i],{scale:2,backgroundColor:"#ffffff",useCORS:true});
-    const url=c.toDataURL("image/jpeg",0.88);imgs.push(url);
-    if(i)pdf.addPage();
-    pdf.addImage(url,"JPEG",0,0,210,297);
-  }
+  const root=document.documentElement,imgs=[];
+  root.style.setProperty("--s","1");
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  try{
+    const sheets=[...document.querySelectorAll(".sheet")];
+    for(let i=0;i<sheets.length;i++){
+      const c=await html2canvas(sheets[i],{scale:2,backgroundColor:"#ffffff",useCORS:true,scrollX:0,scrollY:-window.scrollY});
+      const url=c.toDataURL("image/jpeg",0.88);imgs.push(url);
+      if(i)pdf.addPage();
+      pdf.addImage(url,"JPEG",0,0,210,297);
+    }
+  }finally{fit()}
   return {blob:pdf.output("blob"),imgs};
 }
 function pdfName(){const f=S.slots.find(x=>x.date);return `場地借用單_${S.club||"未填社團"}${f?"_"+f.date:""}.pdf`}
 function showImages(imgs){
   let o=$("imgOverlay");if(o)o.remove();
   o=document.createElement("div");o.id="imgOverlay";o.className="noprint";
-  o.style.cssText="position:fixed;inset:0;background:#fff;z-index:20;overflow:auto;padding:12px;font:14px system-ui,sans-serif";
+  o.style.cssText="position:fixed;inset:0;background:#fff;z-index:60;overflow:auto;padding:12px;font:14px system-ui,sans-serif";
   o.innerHTML='<div style="max-width:820px;margin:0 auto"><button class="btn primary" id="imgClose">關閉</button> <span>長按(手機)或按右鍵(電腦)圖片即可另存,也可以截圖。</span>'+
     imgs.map((u,i)=>`<img src="${u}" alt="第${i+1}頁" style="display:block;width:100%;margin:10px 0;border:1px solid #ccc">`).join("")+'</div>';
   document.body.appendChild(o);$("imgClose").onclick=()=>o.remove();
