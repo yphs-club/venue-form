@@ -85,7 +85,7 @@ table.ct.tail{flex:1 1 auto}
 </head>
 <body>
 <header class="top noprint"><h1>學生課後活動家長同意書</h1><p>新北市立永平高中 · 平時課後練習</p>
-<nav><a href="index.html">場地借用申請表</a><a class="on" href="consent.html">家長同意書</a></nav></header>
+<nav><a href="index.html">場地借用申請表</a><a class="on" href="consent.html">家長同意書</a><a href="activity.html">活動申請表</a></nav></header>
 <div class="app">
 <div class="panel noprint">
 
@@ -228,6 +228,7 @@ function renderWarn(){
   if(S.mode==="multi"){
     if(!S.dates.trim())w.push("尚未有活動日期(請先在借用單填時段,或手動輸入)");
     if(!S.month)w.push("尚未選月份");
+
   }else if(!S.sdate)w.push("尚未選日期");
   const late=S.mode==="single"?(S.send>"18:00"):activeSlots().some(s=>s.end>"18:00");
   if(late&&S.follow!=="1")w.push("練習超過 18:00,須有指導老師或教練全程隨同,否則校方不予核准");

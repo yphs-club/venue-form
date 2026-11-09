@@ -7,7 +7,7 @@
  *       場地借用單 / 20261110-010425_場地借用單_儀隊_2026-12-04.pdf
  *       家長同意書 / 20261110-020328_家長同意書_儀隊_115年12月.pdf
  *     未填社團 / 場地借用單 / ...(網頁沒填社團名稱時)
- *     其他 / ...(檔名不是借用單或同意書時)
+ *     其他 / ...(檔名不是借用單、同意書或活動申請表時)
  *
  * 設定:
  * 1) 把 TOKEN 改成你自己的通關碼(要和網頁 index.html、consent.html 裡的 UPLOAD_TOKEN 相同)。
@@ -20,7 +20,7 @@
 const TOKEN = '請改成你自己的通關碼';
 const ROOT_NAME = '社團申請表單';          // 會自動在雲端最上層建立這個資料夾
 const MAX_BASE64_CHARS = 8 * 1024 * 1024;  // 約 6MB,超過就拒收
-const TYPES = ['場地借用單', '家長同意書'];
+const TYPES = ['場地借用單', '家長同意書', '活動申請表'];
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -62,7 +62,7 @@ function doGet() { return out_({ ok: true, msg: 'upload endpoint ready' }); }
 // 由檔名判斷種類與社團,例如「家長同意書_儀隊_115年12月.pdf」→ 家長同意書 / 儀隊
 function classify_(filename, d) {
   let type = '其他', club = '';
-  const m = filename.match(/^(場地借用單|家長同意書)_([^_]+?)(?:_|\.pdf$)/i);
+  const m = filename.match(/^(場地借用單|家長同意書|活動申請表)_([^_]+?)(?:_|\.pdf$)/i);
   if (m) { type = m[1]; club = m[2]; }
   if (d && d.type && TYPES.indexOf(String(d.type)) >= 0) type = String(d.type);
   if (d && d.club) club = clean_(d.club);

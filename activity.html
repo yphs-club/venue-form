@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>學生社團活動申請表產生器</title>
+<style>
+:root{--accent:#7b5ea7;--accent-d:#654a8e;--bg:#f2edf6;--line:#d9cfe4;--text:#1f2937;--muted:#6b7280;--warn:#b45309;--warn-bg:#fef3c7;--ok:#166534;--ok-bg:#dcfce7;--s:1}
+*{box-sizing:border-box}
+body{margin:0;font-family:"DFKai-SB","BiauKai","標楷體","Noto Serif TC","PMingLiU",serif;background:var(--bg);color:#000}
+.top{background:#7b5ea7;border-bottom:6px solid #b9a3d6;color:#fff;padding:14px 20px;font-family:system-ui,"Noto Sans TC",sans-serif}
+.top h1{margin:0;font-size:20px;letter-spacing:.5px}
+.top p{margin:2px 0 0;font-size:13px;opacity:.9}
+.top nav{margin-top:8px;font-size:14px}
+.top nav a{color:#fff;text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid #ffffff80;margin-right:6px}
+.top nav a.on{background:#fff;color:#654a8e;font-weight:700}
+.app{display:flex;gap:18px;padding:18px;align-items:flex-start;max-width:1400px;margin:0 auto}
+.panel{width:420px;flex:none;font-family:system-ui,"Noto Sans TC",sans-serif;font-size:15px;color:var(--text);position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding-right:2px}
+.card{background:#fff;border:1px solid #e4dbed;border-radius:12px;padding:14px 14px 10px;margin:0 0 12px;box-shadow:0 1px 3px #5b46801a}
+.card>h2{font-size:16px;margin:0 0 10px;display:flex;align-items:center;gap:8px;font-weight:700}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;flex:none}
+.panel label{display:block;margin:8px 0 0;font-size:13px;color:var(--muted)}
+.panel label.chip{margin:0}
+.panel input[type=text],.panel input[type=tel],.panel input[type=date],.panel input[type=time],.panel input[type=number],.panel textarea,.panel select{width:100%;min-height:40px;padding:8px 10px;margin-top:3px;font:inherit;font-size:15px;color:var(--text);background:#fff;border:1px solid var(--line);border-radius:8px}
+.panel input:focus,.panel textarea:focus,.panel select:focus,button:focus-visible{outline:2px solid #cbbbe3;outline-offset:1px;border-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{position:relative;display:inline-block}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:14px;color:var(--text)}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip input:focus-visible+span{outline:2px solid #cbbbe3;outline-offset:1px}
+button{font:inherit;cursor:pointer}
+.btn{padding:9px 14px;min-height:40px;border:1px solid #b9a9d0;border-radius:8px;background:#faf8fc;color:var(--text);font-size:15px}
+.btn:hover{background:#f1eaf7}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+.btn.primary:hover{background:var(--accent-d)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.block{width:100%}
+.hint{color:var(--muted);font-size:12.5px;line-height:1.5;margin:6px 0 0}
+.wkgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:6px}
+.wkgrid div{text-align:center;font-size:12px;color:var(--muted)}
+.wkgrid input{min-height:36px!important;padding:4px 2px!important;font-size:12px!important;text-align:center;margin:0!important}
+.warn{list-style:none;margin:0;padding:0;font-size:13.5px}
+.warn li{margin:0 0 6px;padding:7px 10px;border-radius:8px;background:var(--warn-bg);color:var(--warn)}
+.warn li.ok{background:var(--ok-bg);color:var(--ok)}
+.warn li.info{background:#efe8f7;color:#654a8e}
+.actions{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 0 4px;background:linear-gradient(to top,var(--bg) 70%,#f2edf600)}
+.actions .primary{flex:2}.actions .btn:not(.primary){flex:1}
+.pvhead{font-family:system-ui,"Noto Sans TC",sans-serif;font-size:13px;color:var(--muted);margin:0 0 8px;text-align:center}
+.preview{flex:1;min-width:0}
+.sheet-wrap{width:calc(210mm*var(--s));height:calc(297mm*var(--s));margin:0 auto 16px;position:relative;box-shadow:0 2px 10px #00000026;background:#fff}
+.sheet{width:210mm;height:297mm;background:#fff;padding:10mm 12mm;position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:top left;overflow:hidden;display:flex;flex-direction:column}
+.cut{text-align:center;font-size:10px;color:#444;letter-spacing:1px;white-space:nowrap;overflow:hidden;margin:3.5mm 0;flex:none}
+.form{font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;min-height:0}
+.form.c1{flex:1.4 1 0}
+.form.c2{flex:1 1 0}
+.form h2{text-align:center;font-size:19px;margin:0 0 3mm;letter-spacing:.5px;position:relative;flex:none}
+.form h2 .copy{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:11.5px;font-weight:700;letter-spacing:0}
+table.ct{border-collapse:collapse;width:100%;table-layout:fixed;flex:none}
+table.ct.tail{flex:1 1 auto}
+.ct td,.ct th{border:1px solid #000;padding:2mm 2.5mm;vertical-align:middle;word-break:break-all;height:10mm}
+.ct th{font-weight:700;text-align:center;white-space:nowrap}
+.ct.wk td,.ct.wk th{text-align:center;padding:1.4mm 1mm}
+.ct.wk th{height:9mm}
+.ct.wk td{height:15mm;font-size:12.5px;line-height:1.3}
+.notes{margin-top:3.5mm;font-size:11.5px;line-height:1.55}
+.u{display:inline-block;border-bottom:1px solid #000;min-width:8em;height:1em}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .top,.panel,.noprint,.pvhead{display:none!important}
+  .app{display:block;padding:0}
+  .sheet-wrap{width:auto;height:auto;margin:0;box-shadow:none}
+  .sheet{position:relative;transform:none}
+}
+@media (max-width:900px){
+  .app{flex-direction:column;padding:10px 10px 90px}
+  .panel{width:100%;position:static;max-height:none;overflow:visible}
+  .preview{width:100%}
+  .actions{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 8px #0000001a}
+  .top{padding:12px 14px}
+}
+.sheet.p1{padding:9mm 11mm}
+.ap h2{text-align:center;font-size:19px;margin:0 0 2mm;letter-spacing:.5px}
+.ap .dt{text-align:right;font-size:13.5px;margin:0 0 2mm}
+table.ap{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;line-height:1.4}
+.ap td,.ap th{border:1px solid #000;padding:1.2mm 1.8mm;vertical-align:middle;word-break:break-all;height:9mm}
+.ap th{font-weight:700;text-align:center}
+.ap td.c{text-align:center}
+.ap .mem td{height:7.4mm;padding:.6mm 1.2mm;text-align:center}
+.ap .small{font-size:11.5px;line-height:1.5}
+.ta{min-height:80px}
+</style>
+</head>
+<body>
+<header class="top noprint"><h1>學生社團活動申請表</h1><p>新北市立永平高中 · 校內／校外活動申請 + 家長同意書</p>
+<!--NAV-START--><nav><a href="index.html">場地借用申請表</a><a href="consent.html">家長同意書</a><a class="on" href="activity.html">活動申請表</a></nav><!--NAV-END--></header>
+<div class="app">
+<div class="panel noprint">
+
+  <section class="card">
+    <h2>🔗 從場地借用單帶入</h2>
+    <p class="hint" id="impNote">會帶入「場地借用申請表」的社團、負責人、場地與人員名單。</p>
+    <button class="btn block" id="reimport" style="margin-top:8px">重新從借用單帶入</button>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">1</span>活動基本資料</h2>
+    <div class="chips"><label class="chip"><input type="radio" name="scope" value="校內" checked><span>校內活動</span></label><label class="chip"><input type="radio" name="scope" value="校外"><span>校外活動</span></label></div>
+    <div class="row"><label>申請日期<input type="date" id="adate"></label><label>社團名稱<input type="text" id="unit"></label></div>
+    <label>活動名稱<input type="text" id="aname"></label>
+    <label>活動地點<input type="text" id="place"></label>
+    <label>活動類型(可複選)</label>
+    <div class="chips" id="types"></div>
+    <label>活動內容概述<textarea id="desc" rows="3"></textarea></label>
+    <label>費用(元,含保險、午餐;沒有可空白)<input type="number" min="0" id="fee" inputmode="numeric"></label>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">2</span>時間(24 小時制)</h2>
+    <div class="row"><label>開始日期<input type="date" id="sd"></label><label>開始時間<input type="time" id="st"></label></div>
+    <div class="row"><label>結束日期<input type="date" id="ed"></label><label>結束時間<input type="time" id="et"></label></div>
+    <p class="hint">同一天的活動,結束日期請填同一天。學生不能自行舉辦過夜活動。</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">3</span>人員</h2>
+    <div class="row"><label>負責人班級<input type="text" id="scls" placeholder="2年8班"></label><label>負責人姓名<input type="text" id="sname"></label></div>
+    <div class="row"><label>負責人手機<input type="tel" id="sphone" inputmode="tel"></label><label>職稱<input type="text" id="stitle" placeholder="社長"></label></div>
+    <div class="row"><label>指導老師(簽章欄免填)<input type="text" id="tname" placeholder="顏老師"></label><label>老師電話<input type="tel" id="tphone" inputmode="tel"></label></div>
+    <div class="row"><label>帶隊師長姓名<input type="text" id="lname"></label><label>身份(畢業學長、家長、某校老師…)<input type="text" id="lrole"></label></div>
+    <label>帶隊師長聯絡電話<input type="tel" id="lphone" inputmode="tel"></label>
+    <div class="row"><label>本校參加人數<input type="number" min="0" id="inn" inputmode="numeric"></label><label>外校參加人數<input type="number" min="0" id="out" inputmode="numeric"></label></div>
+    <label>本校參與人員名單(一行一人,格式「班-號 姓名」,例:208-12 王小明)<textarea id="members" class="ta" rows="5"></textarea></label>
+    <p class="hint" id="memHint"></p>
+  </section>
+
+  <section class="card">
+    <h2>✅ 送出前檢查</h2>
+    <ul class="warn" id="warn"></ul>
+  </section>
+
+  <div class="actions"><button class="btn primary" id="pdf">下載 PDF(2 頁)</button><button class="btn" id="reset">清空</button></div>
+  <div id="syncOut" class="hint" aria-live="polite"></div>
+  <p class="hint">第 1 頁:活動申請表;第 2 頁:家長同意書(社團活動組留存聯 + 家長留存聯)。指導老師簽章、各處室簽核與家長簽名請列印後手寫。</p>
+</div>
+<div class="preview">
+  <p class="pvhead noprint" id="pvhead"></p>
+  <div id="preview"></div>
+</div>
+</div>
+
+<script>
+const VKEY="venueForm.v1", AKEY="activityForm.v1";
+/*UPLOAD-START*/const UPLOAD_URL="https://script.google.com/macros/s/AKfycbwxhbTCcyvgl3X7jKuvEyhmkWsLoo7bj2WptBBbL02ALK0-MMbAcjKSmmlETIzZf1Z4/exec", UPLOAD_TOKEN="ZR0VJ31fk1UdTAdP";/*UPLOAD-END*/
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const WD="日一二三四五六", WORDER=[1,2,3,4,5,6,0];
+const TYPES=["舉辦活動","訓練","會議","成果發表","參加比賽","外校活動","其他"];
+const todayISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const blankS=()=>({scope:"校內",adate:todayISO(),unit:"",aname:"",place:"",types:[],desc:"",fee:"",sd:"",st:"",ed:"",et:"",scls:"",sname:"",sphone:"",stitle:"社長",tname:"",tphone:"",lname:"",lrole:"",lphone:"",inn:"",out:"",members:""});
+let S=blankS();
+try{Object.assign(S,JSON.parse(localStorage.getItem(AKEY)||"{}"))}catch(e){}
+const textIds=["adate","unit","aname","place","desc","fee","sd","st","ed","et","scls","sname","sphone","stitle","tname","tphone","lname","lrole","lphone","inn","out","members"];
+const ymd=d=>d.split("-").map(Number);
+const roc=d=>{const [y,m,dd]=ymd(d);return {y:y-1911,m,d:dd,w:WD[new Date(y,m-1,dd).getDay()]}};
+
+$("types").innerHTML=TYPES.map(t=>`<label class="chip"><input type="checkbox" data-type="${t}"><span>${t}</span></label>`).join("");
+function memberList(){return S.members.split(/\n+/).map(x=>x.trim()).filter(Boolean).map(l=>{const m=l.match(/^(\S+)\s+(.+)$/);return m?{id:m[1],name:m[2]}:{id:"",name:l}})}
+
+function importVenue(){
+  let V={};try{V=JSON.parse(localStorage.getItem(VKEY)||"{}")}catch(e){}
+  if(!V||!V.club&&!V.members){$("impNote").textContent="還沒有借用單的資料。請先到「場地借用申請表」填寫,再回來按「重新從借用單帶入」。";return false}
+  S.unit=V.club||S.unit;
+  const places=(V.venues||[]).concat(V.vother?[V.vother]:[]).concat(V.vclass?[V.vclass+"教室"]:[]);
+  if(places.length&&!S.place)S.place=places.join("、");
+  S.sname=V.pname||V.aname||S.sname;S.scls=V.pcls||V.acls||S.scls;S.sphone=V.aphone||S.sphone;if(V.pname)S.stitle="社長";
+  if(V.members){S.members=V.members.split(/[\n,，、;；]+/).map(x=>x.trim()).filter(Boolean).join("\n")}
+  const n=memberList().length;if(n&&!S.inn)S.inn=String(n);
+  $("impNote").textContent="已從借用單帶入社團、負責人、場地與人員名單。請確認並補上活動資料。";
+  return true;
+}
+function load(){
+  textIds.forEach(id=>$(id).value=S[id]||"");
+  document.querySelectorAll('input[name=scope]').forEach(r=>r.checked=r.value===S.scope);
+  document.querySelectorAll('[data-type]').forEach(c=>c.checked=S.types.includes(c.dataset.type));
+}
+function save(){try{localStorage.setItem(AKEY,JSON.stringify(S))}catch(e){}render()}
+textIds.forEach(id=>$(id).addEventListener("input",()=>{S[id]=$(id).value;if(id==="sd"&&!S.ed){S.ed=S.sd;$("ed").value=S.ed}save()}));
+document.querySelectorAll('input[name=scope]').forEach(r=>r.addEventListener("change",()=>{S.scope=r.value;save()}));
+document.querySelectorAll('[data-type]').forEach(c=>c.addEventListener("change",()=>{S.types=[...document.querySelectorAll('[data-type]')].filter(x=>x.checked).map(x=>x.dataset.type);save()}));
+$("reimport").onclick=()=>{if(importVenue()){load();save();toast("已重新帶入借用單資料")}else toast("還沒有借用單的資料")};
+function toast(t){let e=$("toast");if(!e){e=document.createElement("div");e.id="toast";e.className="noprint";e.style.cssText="position:fixed;left:50%;bottom:88px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;font:14px system-ui,sans-serif;z-index:50;max-width:90vw;text-align:center";document.body.appendChild(e)}e.textContent=t;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",6000)}
+let armed=0;
+$("reset").onclick=()=>{if(armed){clearTimeout(armed);armed=0;try{localStorage.removeItem(AKEY)}catch(e){}S=blankS();load();render();return}toast("要清空目前內容?(再按一次確認)");armed=setTimeout(()=>armed=0,5000)};
+
+function renderWarn(){
+  const w=[];
+  if(!S.unit.trim())w.push("尚未填社團名稱");
+  if(!S.aname.trim())w.push("尚未填活動名稱");
+  if(!S.place.trim())w.push("尚未填活動地點");
+  if(!S.types.length)w.push("尚未勾選活動類型");
+  if(!S.desc.trim())w.push("尚未填活動內容概述");
+  if(!S.sd||!S.st||!S.ed||!S.et)w.push("活動起訖日期或時間未填完整");
+  else{
+    if(S.ed+" "+S.et<=S.sd+" "+S.st)w.push("結束時間必須晚於開始時間");
+    if(S.ed!==S.sd)w.push("活動跨日:學生不能自行舉辦任何過夜活動,請確認");
+  }
+  if(!S.sname.trim())w.push("尚未填負責人");
+  if(!(S.lname.trim()||S.tname.trim()))w.push("尚未填指導老師或帶隊師長");
+  if(S.scope==="校外"&&!S.lname.trim())w.push("校外活動請填帶隊師長與身份");
+  const n=memberList().length;
+  if(n>36)w.push("名單超過 36 人,表格放不下(多出的請在背面加填)");
+  if(n&&S.inn&&+S.inn!==n)w.push(`本校參加人數(${S.inn})與名單筆數(${n})不同`);
+  const late=S.et>"18:00";
+  if(late&&!S.tname.trim()&&!S.lname.trim())w.push("活動超過 18:00,須有指導老師或教練全程隨同");
+  $("warn").innerHTML=w.length?w.map(x=>`<li>⚠ ${esc(x)}</li>`).join(""):'<li class="ok">✔ 資料看起來完整</li>';
+  $("memHint").textContent=n?`目前名單 ${n} 人`:"";
+}
+
+const U=n=>"＿".repeat(n);
+function totalCount(){const a=+S.inn||0,b=+S.out||0;return a+b||""}
+function dtLine(d,t,tail){
+  if(!d)return `　　年　　月　　日　時間:　　點　　分${tail}`;
+  const r=roc(d),[hh,mm]=(t||":").split(":");
+  return `${r.y} 年 ${r.m} 月 ${r.d} 日（${r.w}）時間：${hh||"　"} 點 ${mm||"　"} 分${tail}`;
+}
+function page1(){
+  const types=TYPES.map(t=>`${S.types.includes(t)?"■":"□"}${t}`).join("　");
+  const tot=totalCount();
+  const ml=memberList(),rows=Math.max(9,Math.ceil(ml.length/4));
+  const mrows=Array.from({length:rows},(_,r)=>`<tr class="mem">${[0,1,2,3].map(c=>{const m=ml[r*4+c];return `<td>${m?esc(m.id):""}</td><td>${m?esc(m.name):""}</td>`}).join("")}</tr>`).join("");
+  const ar=S.adate?roc(S.adate):null;
+  const lead=S.lname?`姓名：${esc(S.lname)}`:"姓名：";
+  return `<div class="sheet p1 ap"><h2>永平高中學生社團「${S.scope==="校內"?"■":"□"}校內 ${S.scope==="校外"?"■":"□"}校外活動」申請表</h2>
+  <div class="dt">申請日期：${ar?`${ar.y} 年 ${ar.m} 月 ${ar.d} 日`:"　　年　　月　　日"}</div>
+  <table class="ap"><colgroup><col style="width:10%">${"<col style=\"width:10.5%\"><col style=\"width:12%\">".repeat(4)}</colgroup>
+   <tr><th>社團名稱</th><td colspan="2" class="c">${esc(S.unit)}</td><th>負責人</th><td colspan="2" class="c">${esc(S.scls)}　姓名：${esc(S.sname)}</td><th>手機</th><td colspan="2" class="c">${esc(S.sphone)}</td></tr>
+   <tr><th>活動名稱</th><td colspan="3" class="c">${esc(S.aname)}</td><th>參加人員</th><td colspan="4">共計 ${tot?`<b>${tot}</b>`:"　　"} 人，包含本校 ${S.inn?`<b>${esc(S.inn)}</b>`:"　　"} 人、外校 ${S.out?`<b>${esc(S.out)}</b>`:"　　"} 人。（請附本校參加人員名單）</td></tr>
+   <tr><th>活動類型</th><td colspan="8" class="small">${types}</td></tr>
+   <tr><th>活動內容概述</th><td colspan="8" style="height:34mm;vertical-align:top;white-space:pre-wrap">${esc(S.desc)}</td></tr>
+   <tr><th>時　間<br><span style="font-weight:400;font-size:11px">24小時制填寫</span></th><td colspan="8" style="height:20mm;line-height:1.9">自　${dtLine(S.sd,S.st,"起")}<br>至　${dtLine(S.ed,S.et,"止")}</td></tr>
+   <tr><th>地點</th><td colspan="4" class="c">${esc(S.place)}</td><th>費用</th><td colspan="3" class="c">${S.fee?esc(S.fee):"　　　　"} 元(含保險、午餐)</td></tr>
+   <tr><th rowspan="3">指導老師<br>簽章</th><td colspan="3" rowspan="3" class="c"></td><th colspan="2" rowspan="3" class="small">帶隊師長<br>（務必註明老師身份如畢業學長、家長、某校老師……等）</th><td colspan="3" class="small">${lead}</td></tr>
+   <tr><td colspan="3" class="small">身份：${esc(S.lrole)}</td></tr>
+   <tr><td colspan="3" class="small">聯絡電話：${esc(S.lphone)}</td></tr>
+   <tr><th rowspan="${rows+1}" class="small">本校參與人員名單<br>(若不夠請在背面加填)<br>本校參與總人數共 ${S.inn?`<b>${esc(S.inn)}</b>`:"　　"} 人</th>${"<th>班-號</th><th>姓名</th>".repeat(4)}</tr>
+   ${mrows}
+   <tr><th>備註</th><td colspan="8" class="small">1、本活動申請核准後，始視為社團活動。2、各社團於活動進行時請<b>遵守學校相關規定</b>。3、參加教育部或教育局舉辦的外縣市比賽需由家長代表、或教練、教師陪同。4、學生不能自行舉辦任何過夜活動。</td></tr>
+   <tr><th colspan="2" style="height:7mm">社團活動組</th><th colspan="2">生輔組</th><th colspan="2">學務主任</th><th colspan="3">校　長</th></tr>
+   <tr><td colspan="2" style="height:16mm"></td><td colspan="2"></td><td colspan="2"></td><td colspan="3"></td></tr>
+  </table></div>`;
+}
+/* ---------- consent (page 2) ---------- */
+function timeRows(){
+  if(!S.sd)return {single:`■單次　　年　　月　　日（　）時間:`,multi:`□多次　　年　　月（一個月為限）日期：`};
+  const a=roc(S.sd),b=S.ed?roc(S.ed):a;
+  const same=!S.ed||S.ed===S.sd;
+  const tm=same?`${esc(S.st)}-${esc(S.et)}`:`${esc(S.st)} 起，至 ${b.m}月${b.d}日（${b.w}）${esc(S.et)} 止`;
+  return {single:`■單次　${a.y}年${a.m}月${a.d}日（${a.w}）時間:${tm}`,multi:`□多次　　年　　月（一個月為限）日期：`};
+}
+function weekGrid(){
+  const cells={1:"",2:"",3:"",4:"",5:"",6:"",0:""};
+  if(S.sd){
+    const [y,m,d]=ymd(S.sd),e=S.ed?ymd(S.ed):[y,m,d];
+    const start=new Date(y,m-1,d),end=new Date(e[0],e[1]-1,e[2]);
+    const days=Math.round((end-start)/864e5);
+    if(days===0)cells[start.getDay()]=esc(S.st)+"<br>"+esc(S.et);
+    else for(let i=0;i<=Math.min(days,6);i++){const w=new Date(y,m-1,d+i).getDay();cells[w]=i===0?esc(S.st)+"<br>起":i===days?"至<br>"+esc(S.et):"全天"}
+  }
+  return `<table class="ct wk" style="margin-top:-1px"><tr>${WORDER.map(w=>`<th>星期${WD[w]}</th>`).join("")}</tr><tr>${WORDER.map(w=>`<td>${cells[w]}</td>`).join("")}</tr></table>`;
+}
+function cform(copy){
+  const t=timeRows();
+  const tn=S.lname||S.tname,tp=S.lname?S.lphone:S.tphone;
+  const teacher=`${esc(tn)}${S.lname&&S.lrole?"（"+esc(S.lrole)+"）":""}　連絡電話：${esc(tp)}　是否隨行：${(tn?"●是　□否":"□是　□否")}`;
+  const stu=`${esc(S.sname)}　職稱：${esc(S.stitle)}　連絡電話：${esc(S.sphone)}　（${esc(S.scls)||"　　年　　班　　號"}）`;
+  const head=copy===1?`新北市立永平高級中學 學生課後活動 家長同意書<span class="copy">社團活動組留存聯</span>`:`新北市立永平高級中學　家長同意書<span class="copy">家長留存聯</span>`;
+  const tail=copy===1?`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm 4mm 3mm;vertical-align:top">
+      <div><b>□同意　□不同意</b></div>
+      <div style="margin-top:2mm">❖參加本次學生課外活動須確實遵守各項安全規定與申請之時間，如有違反規定願接受校方懲處。</div>
+      <div style="margin-top:6mm"><b>家長意見：</b>${U(34)}</div>
+      <div style="margin-top:6mm"><b>家長簽名：${U(8)}　聯絡手機：${U(8)}　日期：　　年　　月　　日</b></div>
+      <div class="notes">(1)未繳交家長同意書<b>而擅自留校練習／活動者</b>，依校規懲處（記警告）。(2)經抽查如非家長親自簽名，依校規懲處（記警告）。(3)社團活動練習時間如逾<b>18:00</b>，須有指導老師或教練<b>全程隨同</b>，否則校方<b>不予核准</b>。經抽查違規擅留者，<b>暫停該社團場地借用及練習權限一個月</b>。(4)若學生自主活動無指導老師隨行，經家長同意後，則活動由主辦學生與參與同學自行負責。</div>
+    </td></tr></table>`
+    :`<table class="ct tail" style="margin-top:-1px"><tr><td style="padding:4mm;vertical-align:middle">親愛的家長您好，如對此活動尚有任何疑問及意見，請來電學務處社團活動組(02)2231-9670分機225</td></tr></table>`;
+  return `<div class="form c${copy}"><h2>${head}</h2>
+  <table class="ct"><colgroup><col style="width:15%"><col style="width:26%"><col style="width:13%"><col style="width:14%"><col style="width:14%"><col style="width:18%"></colgroup>
+   <tr><th>姓　名</th><td colspan="2" style="text-align:right">（　　年　　班　　號）</td><th>連絡電話</th><td colspan="2"></td></tr>
+   <tr><th>主辦單位</th><td>${esc(S.unit)}</td><th>活動名稱</th><td>${esc(S.aname)}</td><th>活動地點</th><td>${esc(S.place)}</td></tr>
+   <tr><th>老師教練</th><td colspan="5">${teacher}</td></tr>
+   <tr><th>主辦學生</th><td colspan="5">${stu}</td></tr>
+   <tr><th>活動時間</th><td colspan="3">${t.single}</td><th>參加人數</th><td>${totalCount()?totalCount()+" 人":"　　　人"}</td></tr>
+   <tr><td colspan="6">${t.multi}</td></tr>
+  </table>${weekGrid()}${tail}</div>`;
+}
+const CUT="✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂-------✂";
+function render(){
+  const wrap=h=>`<div class="sheet-wrap">${h}</div>`;
+  $("preview").innerHTML=wrap(page1())+wrap(`<div class="sheet">${cform(1)}<div class="cut">${CUT}</div>${cform(2)}</div>`);
+  $("pvhead").textContent="預覽 · A4 共 2 頁(第 1 頁活動申請表、第 2 頁家長同意書)";
+  fit();renderWarn();
+}
+function fit(){
+  const w=$("preview").clientWidth;if(!w)return;
+  const s=Math.min(1,Math.max(.3,(w-4)/793.7));
+  document.documentElement.style.setProperty("--s",s.toFixed(4));
+}
+window.addEventListener("resize",fit);
+
+function loadScript(src){return new Promise((ok,no)=>{if(document.querySelector('script[src="'+src+'"]'))return ok();const e=document.createElement("script");e.src=src;e.onload=ok;e.onerror=()=>no(new Error("load "+src));document.head.appendChild(e)})}
+const blobToB64=b=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(",")[1]);r.onerror=no;r.readAsDataURL(b)});
+async function makePdf(){
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+  await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  const pdf=new window.jspdf.jsPDF({unit:"mm",format:"a4",orientation:"portrait"});
+  const root=document.documentElement;
+  root.style.setProperty("--s","1");
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  try{
+    const sheets=document.querySelectorAll(".sheet");
+    for(let i=0;i<sheets.length;i++){
+      const c=await html2canvas(sheets[i],{scale:2,backgroundColor:"#ffffff",useCORS:true,scrollX:0,scrollY:-window.scrollY});
+      if(i)pdf.addPage();
+      pdf.addImage(c.toDataURL("image/jpeg",0.88),"JPEG",0,0,210,297);
+    }
+  }finally{fit()}
+  return pdf.output("blob");
+}
+function pdfName(){return `活動申請表_${S.unit||"未填社團"}_${S.sd||"未填日期"}.pdf`}
+$("pdf").onclick=async()=>{
+  const btn=$("pdf"),t=btn.textContent;btn.disabled=true;btn.textContent="產生中…";
+  try{
+    const blob=await makePdf(),name=pdfName();
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+    if(UPLOAD_URL){
+      const so=$("syncOut");so.textContent="⏳ 正在同步到管理員雲端…";
+      blobToB64(blob).then(b64=>fetch(UPLOAD_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({token:UPLOAD_TOKEN,filename:name,base64:b64})}))
+        .then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+        .then(j=>{const ok=j&&j.ok;so.textContent=ok?"✔ 已同步到管理員雲端:"+(j.name||name):"✖ 同步失敗:"+((j&&j.error)||"未知原因");toast(ok?"已同步存到管理員的雲端":"同步到管理員雲端失敗")})
+        .catch(e=>{so.textContent="✖ 同步失敗(連線問題):"+(e&&e.message||e)+"。PDF 已下載到你的裝置,請稍後再試或洽管理員。";toast("無法同步到管理員雲端")});
+    }
+    toast("PDF 已產生:"+name);
+  }catch(e){toast("產生 PDF 失敗:"+(e&&e.message||e)+"。請檢查網路後再試一次。")}
+  btn.disabled=false;btn.textContent=t;
+};
+
+if(!S.unit&&!S.sname&&!S.members)importVenue();
+load();render();
+</script>
+</body>
+</html>
