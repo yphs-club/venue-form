@@ -297,7 +297,7 @@ function form(label,rows,big,extra){
    <tr><th>社團名稱</th><td>${esc(S.club)}</td><th>社長</th><td>${esc(S.pcls)}　姓名:${esc(S.pname)}</td></tr>
    <tr><th>申請人</th><td colspan="2">${esc(S.acls)}　姓名:${esc(S.aname)}　手機號碼:${esc(S.aphone)}</td><td>申請日期 ${p?`${p.y}年${p.m}月${p.d}日 星期${p.w}`:"　年　月　日 星期　"}</td></tr>
    <tr><th>借用場地</th><td colspan="3">${venue.join("　")}<br>${other}　　${room}　借用教室班導簽名：＿＿＿＿＿＿</td></tr>
-   <tr><th style="white-space:normal">場地衛生<br><small>(復原、電源關閉與檢查負責人)</small></th><td colspan="3">${sanit}<div style="margin-top:1mm">未復原或清理場地扣評鑑分數 <span style="border:1px solid #000;padding:0 1.6mm">2</span> 分　電源、燈光等未關扣 <span style="border:1px solid #000;padding:0 1.6mm">2</span> 分(地球暖化中)</div></td></tr>
+   <tr><th style="white-space:normal">場地衛生<br><small>(復原、電源關閉與檢查負責人)</small></th><td colspan="3">${sanit}</td></tr>
    <tr><th style="white-space:normal">借用時間<br><small>24時制填寫</small></th><td colspan="3" style="vertical-align:middle;${big?"":"height:23mm"}">${time}</td></tr>
    <tr><th>借用事由</th><td colspan="3" style="height:${big?"16mm":"9mm"}">${esc(S.reason)}</td></tr>
    <tr><th style="white-space:normal">使用場地人員名單</th><td colspan="3" style="height:${big?"22mm":"10mm"}">${(S.total||m.length)?`總人數:${S.total||m.length}人　`:""}${mem}</td></tr>
